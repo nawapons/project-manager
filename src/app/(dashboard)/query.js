@@ -16,7 +16,7 @@ export const getWorkspace = async ({workspaceId}) => {
         const cookieStore = cookies()
         const supabase = createClient(cookieStore)
         const members = await supabase.from("members").select("*").eq("workspacesId",workspaceId)
-        if(!members) return null
+        if(!members) throw new Error("Unauthorized")
 
         const workspace = await supabase.from("workspaces").select("*").eq("id", workspaceId)
         return workspace

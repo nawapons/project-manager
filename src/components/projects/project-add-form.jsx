@@ -31,17 +31,19 @@ export const CreateProjectForm = ({ onCancel }) => {
         resolver: zodResolver(createProjectSchema),
         defaultValues: {
             name: "",
-            image: ""
+            image: "",
+            workspaceId: workspaceId,
         }
     })
 
     const onSubmit = async (values) => {
+        console.log(values)
         const finalValues = {
             ...values,
             workspaceId,
             image: values.image instanceof File ? values.image : "",
         }
-        const response = await axios.post("/api/project/create", {
+        const response = await axios.post("/api/project/", {
             finalValues
         }, {
             headers: {
@@ -50,8 +52,7 @@ export const CreateProjectForm = ({ onCancel }) => {
         })
         if (response.data.success) {
             form.reset()
-            
-            // router.push(`/workspaces/${response.data.data[0].id}`)
+            router.push(`/workspaces/${workspaceId}/projects/${response.data.data[0].id}`)
         } else {
             toast.error(response.data.message)
         }
@@ -75,7 +76,9 @@ export const CreateProjectForm = ({ onCancel }) => {
             </div>
             <CardContent>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4" >
+                    <form onSubmit={
+                        form.handleSubmit(onSubmit)
+                    } className="flex flex-col gap-4" >
                         <div className="flex flex-col gap-y-4 mt-2">
                             <FormField
                                 control={form.control}
@@ -124,15 +127,31 @@ export const CreateProjectForm = ({ onCancel }) => {
                                                     type="file"
                                                     onChange={handleImageChange}
                                                 />
-                                                <Button
-                                                    type="button"
-                                                    variant="lightblue"
+                                                {field.value ? (
+                                                    <Button
+                                                        type="button"
+                                                        variant="destructive"
+                                                        size="xs"
+                                                        className="w-fit mt-2"
+                                                        onClick={() => {
+                                                            field.onChange(null)
+                                                            if (inputRef.current) {
+                                                                inputRef.current.value = ""
+                                                            }
+                                                        }}>
+                                                        Remove Image
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        type="button"
+                                                        variant="lightblue"
 
-                                                    size="xs"
-                                                    className="w-fit mt-2"
-                                                    onClick={() => { inputRef.current?.click() }}>
-                                                    Upload Image
-                                                </Button>
+                                                        size="xs"
+                                                        className="w-fit mt-2"
+                                                        onClick={() => { inputRef.current?.click() }}>
+                                                        Upload Image
+                                                    </Button>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -144,7 +163,7 @@ export const CreateProjectForm = ({ onCancel }) => {
 
                             <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")}>Cancel</Button>
 
-                            <Button type="submit" >Create project</Button>
+                            <Button type="submit">Create project</Button>
                         </div>
                     </form>
                 </Form>
