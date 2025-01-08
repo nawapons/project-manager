@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react"
-import { getProjects } from "../projects/api/use-get-projects"
+import { useGetProjects } from "../projects/api/use-get-projects"
 import { useWorkspaceId } from "../workspaces/hooks/use-workspace-id"
 import { useGetMembers } from "../member/api/use-get-members"
 import { DatePicker } from "../date-picker"
@@ -18,10 +17,19 @@ import { UserIcon } from "lucide-react"
 import { FolderIcon } from "lucide-react"
 export const DataFilters = ({ hideProjectFilter }) => {
     const workspaceId = useWorkspaceId()
-    const [projectOptions, setProjectOptions] = useState([])
-    const [isLoadingProjects, setIsLoadingProjects] = useState(true)
-    const [memberOptions, setMemberOptions] = useState([])
-    const [isLoadingMembers, setIsLoadingMembers] = useState(true)
+
+    const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId })
+    const { data: members, isLoading: isLoadingMembers } = useGetMembers({ workspaceId })
+
+    const projectOptions = projects?.map((project) => ({
+        value: project.id,
+        label: project.name
+    }))
+    const memberOptions = members?.map((member)=>({
+        value: member.id,
+        label: member.profiles.fullname,
+    }))
+
     const [{
         status, assigneeId, projectId, dueDate,
     }, setFilters] = useTaskFilters();
@@ -35,41 +43,7 @@ export const DataFilters = ({ hideProjectFilter }) => {
     const onProjectChange = (value) => {
         setFilters({ projectId: value === "all" ? null : value })
     }
-
-    const fetchProjects = async () => {
-        try {
-            const projectResults = await getProjects({ workspaceId });
-            const projects = projectResults?.map((result) => ({
-                value: result.id,
-                label: result.name,
-            }));
-            setProjectOptions(projects);
-        } catch (error) {
-            throw new Error(error.message)
-        } finally {
-            setIsLoadingProjects(false)
-        }
-    }
-    const fetchMembers = async () => {
-        try {
-            const memberResults = await useGetMembers({ workspaceId });
-            const members = memberResults?.map((member) => ({
-                value: member.id,
-                label: member.profiles.fullname,
-            }))
-            setMemberOptions(members);
-        } catch (error) {
-            throw new Error(error.message)
-        } finally {
-            setIsLoadingMembers(false)
-        }
-    }
-
-    useEffect(() => {
-        fetchProjects()
-        fetchMembers()
-    }, [])
-
+   
     const isLoading = isLoadingProjects || isLoadingMembers;
     if (isLoading) return null;
 
@@ -106,7 +80,7 @@ export const DataFilters = ({ hideProjectFilter }) => {
                 <SelectContent>
                     <SelectItem value="all">All assignees</SelectItem>
                     <SelectSeparator />
-                    {memberOptions?.map((member)=>(
+                    {memberOptions?.map((member) => (
                         <SelectItem key={member.value} value={member.value}>
                             {member.label}
                         </SelectItem>
@@ -125,13 +99,21 @@ export const DataFilters = ({ hideProjectFilter }) => {
                 <SelectContent>
                     <SelectItem value="all">All projects</SelectItem>
                     <SelectSeparator />
-                    {projectOptions?.map((project)=>(
+                    {projectOptions?.map((project) => (
                         <SelectItem key={project.value} value={project.value}>
                             {project.label}
                         </SelectItem>
                     ))}
                 </SelectContent>
             </Select>
+            <DatePicker
+                placeholder="Due date"
+                className="h-8 w-full lg:w-auto"
+                value={dueDate ? new Date(dueDate) : undefined}
+                onChange={(date) => {
+                    setFilters({ dueDate: date ? date.toISOString() : null })
+                }}>
+            </DatePicker>
         </div>
     )
 }

@@ -7,11 +7,12 @@ export async function POST(request) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
     const userId = (await supabase.auth.getUser()).data.user.id
-
+    
     const body = await request.formData();
-    const name = body.get("finalValues[name]")
-    const image = body.get("finalValues[image]")
-    const workspaceId = body.get("finalValues[workspaceId]")
+    console.log(body)
+    const name = body.get("form[name]")
+    const image = body.get("form[image]")
+    const workspaceId = body.get("param[workspaceId]")
     const {data: member} = await supabase.from("members").select("*").eq("userId",userId).eq("workspacesId",workspaceId)
     if(!member || member[0].role !== "ADMIN")
     {

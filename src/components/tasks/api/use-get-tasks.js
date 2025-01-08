@@ -1,20 +1,21 @@
-import axios from "axios"
-
-export const useGetTasks = async ({ workspaceId, projectId, status, search, assigneeId, dueDate }) => {
-    try {
-        const response = await axios.get(`/api/task/`, {
-            params: {
-                workspaceId: workspaceId,
-                projectId : projectId, 
-                status : status, 
-                search : search, 
-                assigneeId : assigneeId, 
-                dueDate : dueDate
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+export const useGetTasks = ({
+    workspaceId, projectId, status, search, assigneeId, dueDate
+}) => {
+    const query = useQuery({
+        queryKey: ["tasks", workspaceId, projectId, status, search, assigneeId, dueDate],
+        queryFn: async () => {
+            const response = await axios.get("/api/task/", {
+                params: {
+                    workspaceId, projectId, status, search, assigneeId, dueDate
+                }
+            })
+            if (response.status !== 200) {
+                throw new Error("Failed to fetch tasks")
             }
-        })
-        return response.data.data
-    } catch (error) {
-        console.error("Error fetching tasks:", error)
-        throw new Error("Failed to get tasks")
-    }
+            return await response.data.data;
+        }
+    })
+    return query;
 }

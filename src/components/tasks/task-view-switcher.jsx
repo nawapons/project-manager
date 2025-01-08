@@ -11,6 +11,8 @@ import { useQueryState } from "nuqs"
 import { Loader } from "lucide-react"
 import { DataFilters } from "./data-filters"
 import { useTaskFilters } from "./hooks/use-task-filters"
+import { DataTable } from "./components/data-table"
+import { columns } from "./components/columns"
 
 export const TaskViewSwitcher = () => {
     const [view, setView] = useQueryState("task-view", {
@@ -20,25 +22,9 @@ export const TaskViewSwitcher = () => {
         status, assigneeId, projectId, dueDate,
     }] = useTaskFilters();
     const workspaceId = useWorkspaceId()
-    const [tasks, setTasks] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
-    const { open } = useCreateTaskModal();
+    const { open, } = useCreateTaskModal();
+    const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({ workspaceId, projectId, status, assigneeId, dueDate })
 
-    const fetchTasks = async () => {
-        try {
-            setIsLoading(true)
-            const data = await useGetTasks({ workspaceId, projectId, status, assigneeId, dueDate })
-            setTasks(data)
-        } catch (error) {
-            throw new Error(error.message)
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
-    useEffect(() => {
-        fetchTasks();
-    }, [ status, assigneeId, projectId, dueDate,])
     return (
         <Tabs
             defaultValue={view}
@@ -69,14 +55,14 @@ export const TaskViewSwitcher = () => {
                 <SeparatorDotted className="my-4" />
                 <DataFilters />
                 <SeparatorDotted className="my-4" />
-                {isLoading ? (
+                {isLoadingTasks ? (
                     <div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">
                         <Loader className="size-5 animate-spin text-muted-foreground" />
                     </div>
                 ) : (
                     <>
                         <TabsContent value="table" className="mt-0">
-                            {JSON.stringify(tasks)}
+                            <DataTable columns={columns} data={tasks?.length ? tasks : []} />
                         </TabsContent>
                         <TabsContent value="kanban" className="mt-0">
                             {JSON.stringify(tasks)}

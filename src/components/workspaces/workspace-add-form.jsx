@@ -19,12 +19,12 @@ import { Input } from "../ui/input"
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import { ImageIcon } from "lucide-react"
 import { useRef } from "react"
-import axios from "axios"
-import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { useCreateWorkspace } from "./api/use-create-workspace"
 export const CreateWorkspaceForm = ({ onCancel }) => {
     const router = useRouter();
     const inputRef = useRef(null)
+    const { mutate, isPending } = useCreateWorkspace();
     const form = useForm({
         resolver: zodResolver(createWorkspaceSchema),
         defaultValues: {
@@ -38,19 +38,12 @@ export const CreateWorkspaceForm = ({ onCancel }) => {
             ...values,
             image: values.image instanceof File ? values.image : "",
         }
-        const response = await axios.post("/api/workspace/create", {
-            finalValues
-        }, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+        mutate({ form: finalValues }, {
+            onSuccess: (response) => {
+                form.reset();
+                router.push(`/workspaces/${response[0].id}`);
+            },
         })
-        if (response.data.success) {
-            form.reset()
-            router.push(`/workspaces/${response.data.data[0].id}`)
-        } else {
-            toast.error(response.data.message)
-        }
     }
 
     const handleImageChange = (e) => {
@@ -120,31 +113,31 @@ export const CreateWorkspaceForm = ({ onCancel }) => {
                                                     type="file"
                                                     onChange={handleImageChange}
                                                 />
-                                               {field.value ? (
-                                                 <Button
-                                                 type="button"
-                                                 variant="destructive"
-                                                 size="xs"
-                                                 className="w-fit mt-2"
-                                                 onClick={() => {
-                                                    field.onChange(null)
-                                                    if(inputRef.current){
-                                                        inputRef.current.value = ""
-                                                    }
-                                                }}>
-                                                    Remove Image
-                                                 </Button>
-                                               ):  (
-                                                <Button
-                                                type="button"
-                                                variant="lightblue"
+                                                {field.value ? (
+                                                    <Button
+                                                        type="button"
+                                                        variant="destructive"
+                                                        size="xs"
+                                                        className="w-fit mt-2"
+                                                        onClick={() => {
+                                                            field.onChange(null)
+                                                            if (inputRef.current) {
+                                                                inputRef.current.value = ""
+                                                            }
+                                                        }}>
+                                                        Remove Image
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        type="button"
+                                                        variant="lightblue"
 
-                                                size="xs"
-                                                className="w-fit mt-2"
-                                                onClick={() => { inputRef.current?.click() }}>
-                                                Upload Image
-                                            </Button>
-                                               )}
+                                                        size="xs"
+                                                        className="w-fit mt-2"
+                                                        onClick={() => { inputRef.current?.click() }}>
+                                                        Upload Image
+                                                    </Button>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
@@ -154,9 +147,9 @@ export const CreateWorkspaceForm = ({ onCancel }) => {
                         <SeparatorDotted />
                         <div className="flex justify-between items-center p-2">
 
-                            <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")}>Cancel</Button>
+                            <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")} disabled={isPending}>Cancel</Button>
 
-                            <Button type="submit" >Create workspace</Button>
+                            <Button type="submit" disabled={isPending}>Create workspace</Button>
                         </div>
                     </form>
                 </Form>

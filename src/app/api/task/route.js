@@ -37,10 +37,8 @@ export async function POST(request) {
         position: newPosition
     }).select()
     if (error) {
-        console.log(error)
         return NextResponse.json({ message: error.message }, { status: 401 })
     }
-    console.log(task)
     return NextResponse.json({ data: task, success: true }, { status: 200 })
 }
 export async function GET(request) {
@@ -97,7 +95,6 @@ export async function GET(request) {
         })
     )
     const populatedTasks = tasks.map((task) => {
-        console.log(task)
         const project = projects.find((project) => project.id === task.projectsId)
         const assignee = assignees.find((assignee) => assignee.id === task.assigneeId)
 
@@ -105,5 +102,45 @@ export async function GET(request) {
             ...task, project, assignee,
         }
     })
-    return NextResponse.json({ data: { ...tasks, documents: populatedTasks } }, { status: 200 })
+    return NextResponse.json({ data: populatedTasks }, { status: 200 })
+}
+export async function DELETE(request) {
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
+    const userId = (await supabase.auth.getUser()).data.user.id
+    const url = new URL(request.url);
+    const taskId = url.searchParams.get('taskId');
+
+    const { data: task } = await supabase.from("tasks").select("*").eq("id", taskId)
+    const member = await supabase.from("members").select("*").eq("workspacesId", task[0].workspacesId).eq("userId", userId)
+    if (!member) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+
+    await supabase.from("tasks").delete().eq("id", taskId)
+    return NextResponse.json({ data: { id: task[0].id }, success: true }, { status: 200 })
+}
+export async function PATCH(request) {
+    const cookieStore = cookies();
+    const supabase = createClient(cookieStore)
+    const userId = (await supabase.auth.getUser()).data.user.id
+    const body = await request.json();
+    const declareValue = createTaskSchema.partial(body)
+    const url = new URL(request.url);
+    const taskId = url.searchParams.get('taskId');
+    const { name, status, workspacesId, projectsId, dueDate, assigneeId } = declareValue.data
+
+    const { data: existingTask } = await supabase.from("tasks").select("*").eq("id", taskId)
+
+    const member = await supabase.from("members").select("*").eq("workspacesId", existingTask[0].workspacesId).eq("userId", userId)
+    if (!member) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+
+    const task = await supabase.from("tasks").update({
+        name: name,
+        status: status,
+        projectsId: projectsId,
+        dueDate: dueDate,
+        assigneeId: assigneeId,
+        description: description,
+    })
+    return NextResponse.json({ data: task }, { status: 200 })
+
 }

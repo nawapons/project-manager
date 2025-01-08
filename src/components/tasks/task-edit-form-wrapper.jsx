@@ -1,18 +1,17 @@
-"use client"
 import { Loader } from "lucide-react";
 import { useGetMembers } from "../member/api/use-get-members";
-import { getProjects, useGetProject, useGetProjects } from "../projects/api/use-get-projects"
+import { useGetProject } from "../projects/api/use-get-projects"
 import { Card, CardContent } from "../ui/card";
 import { useWorkspaceId } from "../workspaces/hooks/use-workspace-id"
-import { useEffect, useState } from "react";
 import { CreateTaskForm } from "./task-add-form";
-
-export const CreateTaskFormWrapper = ({
-    onCancel
+import { useGetTask } from "./api/use-get-task";
+export const EditTaskFormWrapper = ({
+    onCancel, id
 }) => {
-    const workspaceId = useWorkspaceId();
-
-    const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId })
+    const { data: initialValues, isLoading: isLoadingTask } = useGetTask({
+        taskId: id,
+    })
+    const { data: projects, isLoading: isLoadingProjects } = useGetProject({ workspaceId })
     const { data: members, isLoading: isLoadingMembers } = useGetMembers({ workspaceId })
     const projectOptions = projects?.map((project) => ({
         id: project.id,
@@ -23,8 +22,10 @@ export const CreateTaskFormWrapper = ({
         id: member.id,
         name: member.profiles.fullname,
     }))
-
-    const isLoading = isLoadingProjects || isLoadingMembers
+    const workspaceId = useWorkspaceId();
+   
+    const isLoading = isLoadingProjects || isLoadingMembers || isLoadingTask
+    if (!initialValues) return null;
 
     if (isLoading) {
         return (
@@ -36,6 +37,7 @@ export const CreateTaskFormWrapper = ({
         )
     }
 
+    console.log(initialValues)
     return (
         <CreateTaskForm
             onCancel={onCancel}
