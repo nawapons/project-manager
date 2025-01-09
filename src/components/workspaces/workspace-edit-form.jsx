@@ -18,7 +18,7 @@ import {
 import { Input } from "../ui/input"
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import { ImageIcon } from "lucide-react"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
@@ -27,10 +27,13 @@ import { useConfirm } from "@/hooks/use-confirm"
 import { CopyIcon } from "lucide-react"
 import { useDeleteWorkspace } from "./api/use-delete-workspace"
 import { useEditWorkspace } from "./api/use-edit-workspace"
+import { useResetInviteCode } from "./api/use-reset-invite-code"
 export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
     const router = useRouter();
+    const [fullInviteHref, setFullInviteHref] = useState('');
     const { mutate: editWorkspace, isPending: isEditingWorkspace } = useEditWorkspace()
     const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } = useDeleteWorkspace()
+    const { mutate: resetInviteCode, isPending: isResettingInviteCode } = useResetInviteCode()
     const [DeleteDialog, confirmDelete] = useConfirm(
         "Delete Workspace?",
         "This action cannot be undone.",
@@ -42,7 +45,15 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
         "warning",
     )
     const inputRef = useRef(null)
-    
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const origin = window.location.origin;
+            const invitePath = `/workspaces/${initialValues.data[0].id}/join/${initialValues.data[0].inviteCode}`;
+            setFullInviteHref(`${origin}${invitePath}`);
+        }
+    }, [initialValues]);
+
     const form = useForm({
         resolver: zodResolver(updateWorkspaceSchema),
         defaultValues: {
@@ -64,7 +75,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
     }
     const onSubmit = async (values) => {
         const finalValues = {
-            ...values, //TODO if remove image can't update 
+            ...values,
             image: values.image instanceof File ? values.image : undefined,
         }
         editWorkspace({
@@ -74,21 +85,18 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
             onSuccess: (response) => {
                 form.reset();
                 router.push(`/workspaces/${response[0].id}`)
-            },
-            onError: (error) => {
-                console.log(error)
             }
         })
     }
-
     const handleImageChange = (e) => {
         const file = e.target.files?.[0];
+        console.log("select file", file)
         if (file) {
             form.setValue("image", file)
         }
     }
-    
-    const fullInviteHref = `"${window.location.origin}"/workspaces/${initialValues.data[0].id}/join/${initialValues.data[0].inviteCode}`
+
+    // const fullInviteHref = `"${window.location.origin}"/workspaces/${initialValues.data[0].id}/join/${initialValues.data[0].inviteCode}`
     const handleCopyInviteCode = (e) => {
         navigator.clipboard.writeText(fullInviteHref)
             .then(() => toast.success("Copy Invite Code"))
@@ -98,15 +106,14 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
         e.preventDefault();
         const ok = await confirmReset();
         if (!ok) return;
-        const response = await axios.patch("/api/workspace/update", {
-            workspaceId: initialValues.data[0].id
+        resetInviteCode({
+            param: { workspaceId: initialValues.data[0].id }
+        }, {
+            onSuccess: () => {
+                router.refresh();
+            }
         })
-        if (response.data.success) {
-            toast.success("Invite Code Reset")
-            router.refresh()
-        } else {
-            toast.error(response.data.message)
-        }
+
     }
 
     return (
@@ -206,7 +213,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                                         </div>
                                     )}
                                 />
-                                
+
                             </div>
                             <SeparatorDotted />
                             <div className="flex justify-between items-center p-2">

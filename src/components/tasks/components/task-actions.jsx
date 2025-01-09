@@ -15,33 +15,27 @@ import { ExternalLinkIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
+import { useDeleteTask } from "../api/use-delete-task"
+import { useEditTaskModal } from "../hooks/use-edit-task"
 
 export const TaskActions = ({ id, projectId, children }) => {
     const router = useRouter();
     const workspaceId = useWorkspaceId();
-    const [ConfirmDialog,confirmDelete] = useConfirm(
+    const { open } = useEditTaskModal()
+    const { mutate: deleteTask, isPending: delettingTask } = useDeleteTask();
+    const [ConfirmDialog, confirmDelete] = useConfirm(
         "Delete task",
         "This action cannot be undone.",
         "destructive"
     )
-    const [isPending,setIsPending] = useState(false)
 
     const handleDelete = async () => {
-        setIsPending(true)
-        const ok = await confirmDelete()
+        const ok = await confirmDelete();
         if (!ok) return;
-        const response = await axios.delete("/api/task/", {
-            params: {
-                taskId: id
-            }
+
+        deleteTask({
+            param: { taskId: id }
         })
-        if (response.data.success) {
-            toast.success("Task deleted successfully")
-            router.refresh()
-        } else {
-            toast.error(response.data.message)
-        }
-        setIsPending(false)
     }
 
     const onOpenTask = () => {
@@ -52,7 +46,7 @@ export const TaskActions = ({ id, projectId, children }) => {
     }
     return (
         <div className="flex justify-end">
-            <ConfirmDialog/>
+            <ConfirmDialog />
             <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                     {children}
@@ -73,7 +67,7 @@ export const TaskActions = ({ id, projectId, children }) => {
                         Open Project
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                        onClick={() => { }}
+                        onClick={() => open(id)}
                         disabled={false}
                         className="font-medium p-[10px]">
                         <PencilIcon className="size-4 mr-2 stroke-2" />
@@ -81,7 +75,7 @@ export const TaskActions = ({ id, projectId, children }) => {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={handleDelete}
-                        disabled={isPending}
+                        disabled={delettingTask}
                         className="text-amber-700 focus:text-amber-700 font-medium p-[10px]">
                         <TrashIcon className="size-4 mr-2 stroke-2" />
                         Delete Task

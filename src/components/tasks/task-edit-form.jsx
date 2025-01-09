@@ -26,19 +26,20 @@ import { useWorkspaceId } from "../workspaces/hooks/use-workspace-id"
 import { createTaskSchema, TaskStatus } from "@/schema/taskSchema"
 import { MemberAvatar } from "../member/components/member-avatar"
 import { ProjectAvatar } from "../projects/components/project-avatar"
-import { useCreateTask } from "./api/use-create-task"
-export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }) => {
+import { useEditTask } from "./api/use-edit-task"
+export const EditTaskForm = ({ onCancel, projectOptions, memberOptions, initialValues }) => {
     const workspacesId = useWorkspaceId();
-    const { mutate, isPending } = useCreateTask();
+    const { mutate, isPending } = useEditTask();
     const form = useForm({
-        resolver: zodResolver(createTaskSchema.omit({ workspacesId: true })),
+        resolver: zodResolver(createTaskSchema.omit({ workspacesId: true, description: true })),
         defaultValues: {
-            workspacesId,
+            ...initialValues[0],
+            dueDate: initialValues[0].dueDate ? new Date(initialValues[0].dueDate) : undefined
         }
     })
 
     const onSubmit = async (values) => {
-        mutate({ json: { ...values, workspacesId } }, {
+        mutate({ json: values, param: { taskId: initialValues[0].id } }, {
             onSuccess: () => {
                 form.reset()
                 onCancel?.()
@@ -49,7 +50,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }) => {
         <Card className="w-full h-full shadow-none border-none">
             <CardHeader className="flex p-7">
                 <CardTitle className="text-xl font-bold">
-                    Create a new task
+                   Edit a task
                 </CardTitle>
             </CardHeader>
             <div className="px-7">
@@ -184,7 +185,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions }) => {
                         <SeparatorDotted />
                         <div className="flex justify-between items-center p-2">
                             <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")} disabled={isPending}>Cancel</Button>
-                            <Button type="submit" disabled={isPending}>Create Task</Button>
+                            <Button type="submit" disabled={isPending}>Save Changes</Button>
                         </div>
                     </form>
                 </Form>

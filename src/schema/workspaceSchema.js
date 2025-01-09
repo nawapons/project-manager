@@ -16,8 +16,9 @@ export const updateWorkspaceSchema = z.object({
         .optional(),
     image: z
         .union([
-            z.instanceof(File), 
-            z.string().optional().transform((value) => (value === "" ? undefined : value)),
+            z.instanceof(File), // Handle uploaded files
+            z.string().transform((value) => (value === "" ? undefined : value)), // Transform empty string to null
+            z.null(), // Allow explicitly null values
         ])
         .optional(),
 });

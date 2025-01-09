@@ -1,17 +1,19 @@
 import { Loader } from "lucide-react";
 import { useGetMembers } from "../member/api/use-get-members";
-import { useGetProject } from "../projects/api/use-get-projects"
+import { useGetProjects } from "../projects/api/use-get-projects"
 import { Card, CardContent } from "../ui/card";
 import { useWorkspaceId } from "../workspaces/hooks/use-workspace-id"
 import { CreateTaskForm } from "./task-add-form";
 import { useGetTask } from "./api/use-get-task";
+import { EditTaskForm } from "./task-edit-form";
 export const EditTaskFormWrapper = ({
     onCancel, id
 }) => {
+    const workspaceId = useWorkspaceId();
     const { data: initialValues, isLoading: isLoadingTask } = useGetTask({
-        taskId: id,
+        taskId: id, 
     })
-    const { data: projects, isLoading: isLoadingProjects } = useGetProject({ workspaceId })
+    const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId })
     const { data: members, isLoading: isLoadingMembers } = useGetMembers({ workspaceId })
     const projectOptions = projects?.map((project) => ({
         id: project.id,
@@ -22,11 +24,7 @@ export const EditTaskFormWrapper = ({
         id: member.id,
         name: member.profiles.fullname,
     }))
-    const workspaceId = useWorkspaceId();
-   
     const isLoading = isLoadingProjects || isLoadingMembers || isLoadingTask
-    if (!initialValues) return null;
-
     if (isLoading) {
         return (
             <Card className="w-full h-[714px] border-none shadow-none">
@@ -36,13 +34,14 @@ export const EditTaskFormWrapper = ({
             </Card>
         )
     }
+    if (!initialValues) return null;
 
-    console.log(initialValues)
     return (
-        <CreateTaskForm
+        <EditTaskForm
             onCancel={onCancel}
             projectOptions={projectOptions ?? []}
             memberOptions={memberOptions ?? []}
+            initialValues={initialValues}
         />
     )
 }

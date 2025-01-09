@@ -20,12 +20,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import axios from "axios"
 import { toast } from "sonner"
 import { useConfirm } from "@/hooks/use-confirm"
-import {  useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
+import { useDeleteMember } from "@/components/member/api/use-delete-member"
+import { useEditMember } from "@/components/member/api/use-edit-members"
 export const MembersList = () => {
     const router = useRouter()
     const workspaceId = useWorkspaceId()
 
     const { data: members, isLoading: isMemberLoading } = useGetMembers({ workspaceId })
+    const { mutate: updateMember, isLoading: isUpdattingMember } = useEditMember()
+    const { mutate: deleteMember, isLoading: isDeletingMember } = useDeleteMember()
     const [DeleteDialog, confirm] = useConfirm(
         "Remove member?",
         "This member will be removed from this workspace",
@@ -33,32 +37,20 @@ export const MembersList = () => {
     )
 
     const handleUpdate = async (memberId, role) => {
-        const response = await axios.patch(`/api/member/`, {
-            memberId: memberId,
-            role: role,
+        updateMember({
+            memberId, role
         })
-        if (response.data.success) {
-            fetchMembers()
-            toast.success(response.data.message)
-        } else {
-            toast.error(response.data.message)
-        }
     }
     const handleDelete = async (memberId) => {
         const ok = await confirm()
         if (!ok) return;
-        const response = await axios.delete("/api/member/", {
-            params: {
-                memberId: memberId
+        deleteMember({
+            param: { memberId: memberId }
+        }, {
+            onSuccess: () => {
+                router.refresh();
             }
         })
-        if (response.data.success) {
-            fetchMembers()
-            toast.success("Delete member successfully")
-        }
-        else {
-            toast.error(response.data.message)
-        }
     }
 
     return (

@@ -23,10 +23,13 @@ import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ArrowLeftIcon } from "lucide-react"
 import { useConfirm } from "@/hooks/use-confirm"
-import { CopyIcon } from "lucide-react"
 import { updateProjectSchema } from "@/schema/projectSchema"
+import { useEditProject } from "./api/use-edit-project"
+import { useDeleteProject } from "./api/use-delete-project"
 export const EditProjectForm = ({ onCancel, initialValues }) => {
     const router = useRouter();
+    const { mutate, isPending } = useEditProject()
+    const { mutate: deleteProject, isPending: deletingProject } = useDeleteProject()
     const [DeleteDialog, confirmDelete] = useConfirm(
         "Delete Project?",
         "This action cannot be undone.",
@@ -44,37 +47,30 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
     const handleDelete = async () => {
         const ok = await confirmDelete()
         if (!ok) return;
-        const response = await axios.delete("/api/project/", {
-            params: {
-                projectId: initialValues[0].id
+        deleteProject({
+            param: { projectId: initialValues[0].id }
+        },{
+            onSuccess: () => {
+                router.push(`/workspaces/${initialValues[0].workspacesId}`)
             }
         })
-        if (response.data.success) {
-            router.push(`/workspaces/${initialValues[0].workspacesId}`)
-        } else {
-            toast.error(response.data.message)
-        }
     }
     const onSubmit = async (values) => {
         const finalValues = {
             ...values,
-            image: values.image instanceof File ? values.image : initialValues[0].imageUrl,
-            projectId: initialValues[0].id
+            image: values.image instanceof File ? values.image : undefined,
         }
-        const response = await axios.patch("/api/project/", {
-            data: finalValues,
+        mutate({
+            form: finalValues,
+            param: { projectId: initialValues[0].id }
         }, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
+            onSuccess: () => {
+                form.reset()
+                router.refresh()
             }
         })
-        if (response.data.success) {
-            toast.success("Project updated successfully!")
-            form.reset()
-            router.refresh()
-        } else {
-            toast.error(response.data.message)
-        }
+
+
     }
 
     const handleImageChange = (e) => {
@@ -83,7 +79,7 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
             form.setValue("image", file)
         }
     }
-   
+
     return (
         <div className="flex flex-col gap-y-4">
             <DeleteDialog />
@@ -185,9 +181,9 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
                             <SeparatorDotted />
                             <div className="flex justify-between items-center p-2">
 
-                                <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")}>Cancel</Button>
+                                <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")} disabled={isPending}>Cancel</Button>
 
-                                <Button type="submit" variant="primary">Save Changes</Button>
+                                <Button type="submit" variant="primary" disabled={isPending}>Save Changes</Button>
                             </div>
                         </form>
                     </Form>
@@ -204,6 +200,7 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
                             size="sm"
                             variant="destructive"
                             type="button"
+                            disabled={isPending}
                             onClick={handleDelete}>
                             Delete Project
                         </Button>

@@ -7,15 +7,14 @@ export async function POST(request) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
     const userId = (await supabase.auth.getUser()).data.user.id
-    
+
     const body = await request.formData();
     console.log(body)
     const name = body.get("form[name]")
     const image = body.get("form[image]")
     const workspaceId = body.get("param[workspaceId]")
-    const {data: member} = await supabase.from("members").select("*").eq("userId",userId).eq("workspacesId",workspaceId)
-    if(!member || member[0].role !== "ADMIN")
-    {
+    const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", workspaceId)
+    if (!member || member[0].role !== "ADMIN") {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
 
@@ -31,33 +30,32 @@ export async function POST(request) {
         }
         const { data } = supabase.storage.from('workspaces').getPublicUrl(newImageName)
         imageUrl = data.publicUrl
-    }else{
+    } else {
         imageUrl = image
     }
-    const {data: workspace} = await supabase.from("workspaces").update({
+    const { data: workspace } = await supabase.from("workspaces").update({
         name: name,
         imageUrl: imageUrl
-    }).eq("id",workspaceId).select()
+    }).eq("id", workspaceId).select()
     return NextResponse.json({ data: workspace, success: true }, { status: 200 })
 }
-export async function PATCH(request){
-   try{
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
-    const userId = (await supabase.auth.getUser()).data.user.id
-
-    const body = await request.json();
-    const {workspaceId} = body
-    const inviteCode = generateInviteCode(6)
-    const {data: member} = await supabase.from("members").select("*").eq("userId",userId).eq("workspacesId",workspaceId)
-    if(!member || member[0].role !== "ADMIN"){
-        return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+export async function PATCH(request) {
+    try {
+        const cookieStore = cookies()
+        const supabase = createClient(cookieStore)
+        const userId = (await supabase.auth.getUser()).data.user.id
+        const body = await request.json();
+        const { workspaceId } = body
+        const inviteCode = generateInviteCode(6)
+        const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", workspaceId)
+        if (!member || member[0].role !== "ADMIN") {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+        }
+        const { data: workspace } = await supabase.from("workspaces").update({
+            inviteCode: inviteCode,
+        }).eq("id", workspaceId).select()
+        return NextResponse.json({ data: workspace }, { status: 200 })
+    } catch (error) {
+        return NextResponse.json({ message: "Reset Invite Code failed." }, { status: 500 })
     }
-    const {data: workspace} = await supabase.from("workspaces").update({
-        inviteCode: inviteCode,
-    }).eq("id",workspaceId).select()
-    return NextResponse.json({ data: workspace, success: true }, { status: 200 })
-   }catch(error){
-    return NextResponse.json({ message: "Reset Invite Code failed." }, { status: 200 })
-   }
 }

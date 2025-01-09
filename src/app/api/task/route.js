@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
     const body = await request.json();
-    const declareValue = createTaskSchema.safeParse(body)
+    const declareValue = createTaskSchema.safeParse(body.json)
     const { name, status, workspacesId, projectsId, dueDate, assigneeId } = declareValue.data
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
@@ -123,24 +123,27 @@ export async function PATCH(request) {
     const supabase = createClient(cookieStore)
     const userId = (await supabase.auth.getUser()).data.user.id
     const body = await request.json();
-    const declareValue = createTaskSchema.partial(body)
-    const url = new URL(request.url);
-    const taskId = url.searchParams.get('taskId');
-    const { name, status, workspacesId, projectsId, dueDate, assigneeId } = declareValue.data
+    const declareValue = createTaskSchema.partial(body.json)
+    console.log(declareValue)
+    const taskId = body.params.taskId
+    const { name, status, description, projectsId, dueDate, assigneeId } = declareValue //TODO declare value in TaskSchema
 
     const { data: existingTask } = await supabase.from("tasks").select("*").eq("id", taskId)
 
     const member = await supabase.from("members").select("*").eq("workspacesId", existingTask[0].workspacesId).eq("userId", userId)
     if (!member) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
 
-    const task = await supabase.from("tasks").update({
+    const { data: task } = await supabase.from("tasks").update({
         name: name,
         status: status,
         projectsId: projectsId,
         dueDate: dueDate,
         assigneeId: assigneeId,
         description: description,
-    })
+    }).eq("id", taskId).select()
+    console.log(name, status, description, projectsId, dueDate, assigneeId)
+    console.log("TASK ID =>", taskId)
+    console.log(task)
     return NextResponse.json({ data: task }, { status: 200 })
 
 }

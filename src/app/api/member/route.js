@@ -37,10 +37,10 @@ export async function PATCH(request) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
         if (member[0].role !== "ADMIN") {
-            return NextResponse.json({ message: "You are not admin" }, { status: 200 });
+            return NextResponse.json({ message: "You are not admin" }, { status: 401 });
         }
         if (allMembersInWorkspace.total === 1) {
-            return NextResponse.json({ message: "Cannot change role the last member!" }, { status: 200 });
+            return NextResponse.json({ message: "Cannot change role the last member!" }, { status: 401 });
         }
         await supabase.from("members").update({
             role: role
@@ -67,11 +67,11 @@ export async function DELETE(request) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
         if (member[0].id !== memberToDelete[0].id && member[0].role !== "ADMIN") {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 200 });
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
         await supabase.from("members").delete().eq("id", memberId)
         return NextResponse.json({ data: { id: memberToDelete[0].id }, success: true }, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ message: "Failed to delete member!" }, { status: 200 })
+        return NextResponse.json({ message: "Failed to delete member!" }, { status: 500 })
     }
 } 
