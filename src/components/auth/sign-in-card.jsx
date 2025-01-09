@@ -21,9 +21,11 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import OneTapComponent from "./sign-in-google"
 import { createClient } from "@/utils/supabase/client"
+import { useLogin } from "./api/use-login"
 export const SignInCard = ({ setState }) => {
     const supabase = createClient()
     const router = useRouter();
+    const {mutate,isPending} = useLogin()
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -33,14 +35,7 @@ export const SignInCard = ({ setState }) => {
     })
 
     const onSubmit = async (values) => {
-        const response = await axios.post("/api/auth/login", {
-            values
-        })
-        if (response.data.success) {
-            router.push("/workspaces")
-        } else {
-            toast.error(response.data.message)
-        }
+        mutate({values})
     }
     const onGoogleSignIn = async () => {
         await supabase.auth.signInWithOAuth({

@@ -10,17 +10,16 @@ export async function GET(request) {
         const cookieStore = cookies()
         const supabase = createClient(cookieStore)
         const userId = (await supabase.auth.getUser()).data.user.id
-
         if (!workspaceId) {
-            return NextResponse.json({ message: "Missing workspaceId!" }, { status: 400 })
+            return NextResponse.json({ message: "Missing workspaceId!" }, { status: 401 })
         }
         const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", workspaceId)
-
         if (!member) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
         }
 
         const { data } = await supabase.from("projects").select("*").eq("workspacesId", workspaceId).order("created_at", { ascending: false })
+        console.log(data)
         return NextResponse.json({ data }, { status: 200 })
     } catch (error) {
         return NextResponse.json({ message: "Failed to get project!" }, { status: 500 })

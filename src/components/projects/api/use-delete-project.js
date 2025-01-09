@@ -19,6 +19,7 @@ export const useDeleteProject = () => {
         onSuccess: (data) => {
             toast.success("project deleted")
             queryClient.invalidateQueries({ queryKey: ["projects"] })
+            queryClient.invalidateQueries({ queryKey: ["tasks"] })
             queryClient.invalidateQueries({ queryKey: ["project", data.id] })
         },
         onError: () => {

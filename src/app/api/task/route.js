@@ -123,10 +123,10 @@ export async function PATCH(request) {
     const supabase = createClient(cookieStore)
     const userId = (await supabase.auth.getUser()).data.user.id
     const body = await request.json();
-    const declareValue = createTaskSchema.partial(body.json)
+    const declareValue = createTaskSchema.partial().parse(body.json)
+    const { name, status, description, projectsId, dueDate, assigneeId } = declareValue 
     console.log(declareValue)
     const taskId = body.params.taskId
-    const { name, status, description, projectsId, dueDate, assigneeId } = declareValue //TODO declare value in TaskSchema
 
     const { data: existingTask } = await supabase.from("tasks").select("*").eq("id", taskId)
 
