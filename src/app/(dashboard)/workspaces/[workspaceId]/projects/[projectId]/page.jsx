@@ -27,7 +27,7 @@ const ProjectPage = async ({
                     </Button>
                 </div>
             </div>
-            <TaskViewSwitcher/>
+            <TaskViewSwitcher hideProjectFilter/>
         </div>
     )
 }

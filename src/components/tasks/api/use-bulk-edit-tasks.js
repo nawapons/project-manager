@@ -1,30 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
-export const useEditTask = () => {
-    const router = useRouter()
+export const useBulkEditTasks = () => {
     const queryClient = useQueryClient()
     const mutation = useMutation({
-        mutationFn: async ({ json, param }) => {
-            const response = await axios.patch("/api/task", {
-                json,
-                params: {
-                    taskId: param.taskId
-                }
+        mutationFn: async ({ json }) => {
+            const response = await axios.post("/api/task/bulk-update", {
+                tasks: json.tasks,
             })
             if (response.status !== 200) {
                 throw new Error("Failed to update task")
             }
             return await response.data.data
         },
-        onSuccess: (data) => {
-            toast.success("Task updated")
-
-            router.refresh();
+        onSuccess: () => {
+            toast.success("Tasks updated")
             queryClient.invalidateQueries({ queryKey: ["tasks"] })
-            queryClient.invalidateQueries({ queryKey: ["task", data[0].id] })
         },
         onError: (error) => {
             toast.error(error.response.data.message)
