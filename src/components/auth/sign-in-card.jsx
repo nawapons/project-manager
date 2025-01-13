@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import OneTapComponent from "./sign-in-google"
 import { createClient } from "@/utils/supabase/client"
+import { useLogin } from "./api/use-login"
 export const SignInCard = ({ setState }) => {
     const supabase = createClient()
     const router = useRouter();
@@ -31,16 +32,10 @@ export const SignInCard = ({ setState }) => {
             password: ""
         }
     })
+    const {mutate,isPending} = useLogin()
 
     const onSubmit = async (values) => {
-        const response = await axios.post("/api/auth/login", {
-            values
-        })
-        if (response.data.success) {
-            router.push("/workspaces")
-        } else {
-            toast.error(response.data.message)
-        }
+        mutate({values})
     }
     const onGoogleSignIn = async () => {
         await supabase.auth.signInWithOAuth({
@@ -85,12 +80,12 @@ export const SignInCard = ({ setState }) => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" size="lg" className="w-full">Continue</Button>
+                        <Button disabled={isPending} type="submit" size="lg" className="w-full">Continue</Button>
                     </form>
                 </Form>
                 <Separator />
                 <div className="flex flex-col gap-y-2.5">
-                    <Button variant="outline" size="lg" className="w-full relative" onClick={onGoogleSignIn}>
+                    <Button disabled={isPending} variant="outline" size="lg" className="w-full relative" onClick={onGoogleSignIn}>
                         <FcGoogle />
                         Sign in with Google</Button>
                 </div>
