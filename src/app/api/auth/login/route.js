@@ -7,7 +7,6 @@ export async function POST(request) {
         const body = await request.json()
         console.log(body)
         const { email, password } = body.values
-
         const cookiesStore = cookies()
         const supabase = createClient(cookiesStore)
 

@@ -20,10 +20,7 @@ export async function POST(request) {
                 },
             },
         })
-        console.log(data)
         if (error) {
-            console.log(error)
-            console.log('register error', error.message)
             return NextResponse.json({ message: error.message }, { status: 200 })
         }
      

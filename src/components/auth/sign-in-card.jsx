@@ -33,6 +33,7 @@ export const SignInCard = ({ setState }) => {
             password: ""
         }
     })
+    const {mutate,isPending} = useLogin()
 
     const onSubmit = async (values) => {
         mutate({values})
@@ -80,12 +81,12 @@ export const SignInCard = ({ setState }) => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" size="lg" className="w-full">Continue</Button>
+                        <Button disabled={isPending} type="submit" size="lg" className="w-full">Continue</Button>
                     </form>
                 </Form>
                 <Separator />
                 <div className="flex flex-col gap-y-2.5">
-                    <Button variant="outline" size="lg" className="w-full relative" onClick={onGoogleSignIn}>
+                    <Button disabled={isPending} variant="outline" size="lg" className="w-full relative" onClick={onGoogleSignIn}>
                         <FcGoogle />
                         Sign in with Google</Button>
                 </div>
