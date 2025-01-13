@@ -18,15 +18,22 @@ import {
 import { Input } from "../ui/input"
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import { ImageIcon } from "lucide-react"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ArrowLeftIcon } from "lucide-react"
 import { useConfirm } from "@/hooks/use-confirm"
 import { CopyIcon } from "lucide-react"
+import { useDeleteWorkspace } from "./api/use-delete-workspace"
+import { useEditWorkspace } from "./api/use-edit-workspace"
+import { useResetInviteCode } from "./api/use-reset-invite-code"
 export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
     const router = useRouter();
+    const [fullInviteHref, setFullInviteHref] = useState('');
+    const { mutate: editWorkspace, isPending: isEditingWorkspace } = useEditWorkspace()
+    const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } = useDeleteWorkspace()
+    const { mutate: resetInviteCode, isPending: isResettingInviteCode } = useResetInviteCode()
     const [DeleteDialog, confirmDelete] = useConfirm(
         "Delete Workspace?",
         "This action cannot be undone.",
@@ -38,6 +45,15 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
         "warning",
     )
     const inputRef = useRef(null)
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const origin = window.location.origin;
+            const invitePath = `/workspaces/${initialValues.data[0].id}/join/${initialValues.data[0].inviteCode}`;
+            setFullInviteHref(`${origin}${invitePath}`);
+        }
+    }, [initialValues]);
+
     const form = useForm({
         resolver: zodResolver(updateWorkspaceSchema),
         defaultValues: {
@@ -49,68 +65,61 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
     const handleDelete = async () => {
         const ok = await confirmDelete()
         if (!ok) return;
-        const response = await axios.delete("/api/workspace/delete", {
-            params: {
-                workspaceId: initialValues.data[0].id
+        deleteWorkspace({
+            param: { workspaceId: initialValues.data[0].id }
+        }, {
+            onSuccess: () => {
+                router.push("/")
             }
         })
-        if (response.data.success) {
-            router.push('/')
-        } else {
-            toast.error(response.data.message)
-        }
     }
     const onSubmit = async (values) => {
         const finalValues = {
             ...values,
-            image: values.image instanceof File ? values.image : initialValues.data[0].imageUrl,
-            workspaceId: initialValues.data[0].id
+            image: values.image instanceof File ? values.image : undefined,
         }
-        const response = await axios.post("/api/workspace/update", {
-            finalValues,
+        editWorkspace({
+            form: finalValues,
+            param: { workspaceId: initialValues.data[0].id }
         }, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
+            onSuccess: (response) => {
+                form.reset();
+                router.push(`/workspaces/${response[0].id}`)
             }
         })
-        if (response.data.success) {
-            form.reset()
-            router.push(`/workspaces/${response.data.data[0].id}`)
-        } else {
-            toast.error(response.data.message)
-        }
     }
-
     const handleImageChange = (e) => {
         const file = e.target.files?.[0];
+        console.log("select file", file)
         if (file) {
             form.setValue("image", file)
         }
     }
-    const fullInviteHref = `${window.location.origin}/workspaces/${initialValues.data[0].id}/join/${initialValues.data[0].inviteCode}`
-    const handleCopyInviteCode = (e)=>{
+
+    // const fullInviteHref = `"${window.location.origin}"/workspaces/${initialValues.data[0].id}/join/${initialValues.data[0].inviteCode}`
+    const handleCopyInviteCode = (e) => {
         navigator.clipboard.writeText(fullInviteHref)
-        .then(() => toast.success("Copy Invite Code"))
-        
+            .then(() => toast.success("Copy Invite Code"))
+
     }
-    const handleResetInviteCode = async (e)=>{
+    const handleResetInviteCode = async (e) => {
         e.preventDefault();
         const ok = await confirmReset();
-        if(!ok) return ;
-        const response = await axios.patch("/api/workspace/update",{
-            workspaceId: initialValues.data[0].id
+        if (!ok) return;
+        resetInviteCode({
+            param: { workspaceId: initialValues.data[0].id }
+        }, {
+            onSuccess: () => {
+                router.refresh();
+            }
         })
-        if(response.data.success){
-            toast.success("Invite Code Reset")
-            router.refresh()
-        }else{
-            toast.error(response.data.message)
-        }
+
     }
+
     return (
         <div className="flex flex-col gap-y-4">
             <DeleteDialog />
-            <ResetInviteCodeDialog/>
+            <ResetInviteCodeDialog />
             <Card className="w-full h-full shadow-none border-none">
                 <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
                     <Button size="sm" variant="secondary" onClick={onCancel ? onCancel : () => router.push(`/workspaces/${initialValues.data[0].id}`)}>
@@ -193,7 +202,6 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                                                         <Button
                                                             type="button"
                                                             variant="lightblue"
-
                                                             size="xs"
                                                             className="w-fit mt-2"
                                                             onClick={() => { inputRef.current?.click() }}>
@@ -205,13 +213,14 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                                         </div>
                                     )}
                                 />
+
                             </div>
                             <SeparatorDotted />
                             <div className="flex justify-between items-center p-2">
 
-                                <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")}>Cancel</Button>
+                                <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")} disabled={isEditingWorkspace || isDeletingWorkspace}>Cancel</Button>
 
-                                <Button type="submit" variant="primary">Save Changes</Button>
+                                <Button type="submit" variant="primary" disabled={isEditingWorkspace || isDeletingWorkspace}>Save Changes</Button>
                             </div>
                         </form>
                     </Form>
@@ -227,10 +236,10 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                         <div className="flex items-center gap-2 mt-2">
                             <Input disabled type="text" placeholder="Invite Code" value={fullInviteHref} />
                             <Button onClick={handleCopyInviteCode} type="button" className="size-9" variant="secondary">
-                                <CopyIcon className="size-5"/>
+                                <CopyIcon className="size-5" />
                             </Button>
                         </div>
-                        <SeparatorDotted className="mt-4"/>
+                        <SeparatorDotted className="mt-4" />
                         <Button className="mt-6 w-fit ml-auto warning"
                             size="sm"
                             type="button"
@@ -252,6 +261,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                             size="sm"
                             variant="destructive"
                             type="button"
+                            disabled={isEditingWorkspace || isDeletingWorkspace}
                             onClick={handleDelete}>
                             Delete Workspace
                         </Button>

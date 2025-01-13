@@ -3,11 +3,15 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import React from 'react'
 import { Navbar } from '@/components/dashboard/navbar';
 import { WorkspaceAddModal } from '@/components/workspaces/workspace-add-modal';
+import { CreateTaskModal } from '@/components/tasks/task-add-modal';
+import { EditTaskModal } from '@/components/tasks/task-edit-modal';
 
 const DashboardLayout = ({ children }) => {
     return (
         <div className="min-h-screen">
-            <WorkspaceAddModal/>
+            <WorkspaceAddModal />
+            <CreateTaskModal />
+            <EditTaskModal />
             <SidebarProvider>
                 {/* <WorkspaceAddModal /> */}
                 <div className="flex w-full h-full">

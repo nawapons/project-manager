@@ -1,15 +1,24 @@
-import axios from "axios"
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-export const getProjects = async ({ workspaceId }) => {
-    try {
-        const response = await axios.get(`/api/project/`, {
-            params: {
-                workspaceId: workspaceId,
+export const useGetProjects = ({
+    workspaceId
+}) => {
+    const query = useQuery({
+        queryKey: [
+            "projects", workspaceId
+        ],
+        queryFn: async () => {
+            const response = await axios.get("/api/project/", {
+                params: {
+                    workspaceId: workspaceId,
+                }
+            })
+            if (response.status !== 200) {
+                throw new Error("Failed to fetch project")
             }
-        })
-        return response.data.data
-    } catch (error) {
-        console.error("Error fetching workspaces:", error)
-        throw new Error("Failed to get Projects")
-    }
+            return await response.data.data;
+        }
+    })
+    return query;
 }

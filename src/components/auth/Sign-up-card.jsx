@@ -8,19 +8,16 @@ import { Button } from '@/components/ui/button'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { FcGoogle } from 'react-icons/fc'
 import { useForm } from 'react-hook-form'
 import { registerSchema } from "@/schema/userSchema"
-import axios from "axios"
-import { toast } from "sonner"
+import { useRegister } from "./api/use-register"
 export const SignUpCard = ({ setState }) => {
-
+    const {mutate,isPending} = useRegister();
     const form = useForm({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -31,15 +28,13 @@ export const SignUpCard = ({ setState }) => {
     })
 
     const onSubmit = async (values) => {
-        const response = await axios.post("/api/auth/register", {
+        mutate({
             values
+        },{
+            onSuccess: () => {
+                setState("signIn")
+            }
         })
-        if (response.data.success) {
-            toast.success("Register successfully")
-            setState("signIn")
-        } else {
-            toast.error(response.data.message)
-        }
     }
     return (
         <Card className="w-full h-auto md:w-[420px]">
@@ -88,11 +83,11 @@ export const SignUpCard = ({ setState }) => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" size="lg" className="w-full">Continue</Button>
+                        <Button type="submit" size="lg" className="w-full" disabled={isPending}>Continue</Button>
                     </form>
                 </Form>
                 <Separator />
-                <Button type="submit" variant="outline" size="lg" className="w-full">
+                <Button  type="submit" variant="outline" size="lg" disabled={isPending} className="w-full">
                     <FcGoogle />
                     Sign up with Google</Button>
                 <p className="text-center text-muted-foreground text-sm">Already have account ? <span onClick={() => setState("signIn")} className="text-blue-500 hover:underline cursor-pointer">Sign in</span></p>

@@ -23,8 +23,10 @@ import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { useWorkspaceId } from "../workspaces/hooks/use-workspace-id"
 import { createProjectSchema } from "@/schema/projectSchema"
+import { useCreateProject } from "./api/use-create-project"
 export const CreateProjectForm = ({ onCancel }) => {
     const workspaceId = useWorkspaceId();
+    const { mutate, isPending } = useCreateProject()
     const router = useRouter();
     const inputRef = useRef(null)
     const form = useForm({
@@ -37,25 +39,17 @@ export const CreateProjectForm = ({ onCancel }) => {
     })
 
     const onSubmit = async (values) => {
-        console.log(values)
         const finalValues = {
             ...values,
             workspaceId,
             image: values.image instanceof File ? values.image : "",
         }
-        const response = await axios.post("/api/project/", {
-            finalValues
-        }, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
+        mutate({ form: finalValues }, {
+            onSuccess: (response) => {
+                form.reset()
+                router.push(`/workspaces/${workspaceId}/projects/${response[0].id}`)
             }
         })
-        if (response.data.success) {
-            form.reset()
-            router.push(`/workspaces/${workspaceId}/projects/${response.data.data[0].id}`)
-        } else {
-            toast.error(response.data.message)
-        }
     }
 
     const handleImageChange = (e) => {

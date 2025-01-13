@@ -1,11 +1,10 @@
 "use client"
 import { RiAddCircleFill } from "react-icons/ri";
-import { getProjects } from "../projects/api/use-get-projects";
+import { getProjects, useGetProjects } from "../projects/api/use-get-projects";
 import { useWorkspaceId } from "../workspaces/hooks/use-workspace-id";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
 import { ProjectAvatar } from "../projects/components/project-avatar";
 import { useCreateProjectModal } from "../projects/hooks/use-create-project";
 import { ProjectAddModal } from "../projects/project-add-modal";
@@ -14,28 +13,8 @@ import { ProjectSkeleton } from "../skeleton/project-skeleton";
 export const Projects = () => {
   const pathname = usePathname();
   const workspaceId = useWorkspaceId();
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const {data: projects , isLoading: projectsLoading} = useGetProjects({workspaceId});
   const { open: openProject } = useCreateProjectModal();
-
-  const fetchProjects = async () => {
-    if (!workspaceId) return; // Don't fetch projects if workspaceId is not ready
-    try {
-      setLoading(true); // Ensure loading state is set when fetching
-      const data = await getProjects({ workspaceId });
-      setProjects(data);
-    } catch (error) {
-      throw new Error(error.message)
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProjects();
-  }, [pathname]);
-
-
 
   return (
     <div className="flex flex-col gap-y-2">
@@ -47,7 +26,7 @@ export const Projects = () => {
           className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition"
         />
       </div>
-      {loading ? (
+      {projectsLoading ? (
         <div><ProjectSkeleton /></div>
       ) : (
         projects?.map((project) => {
