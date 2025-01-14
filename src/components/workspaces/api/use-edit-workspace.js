@@ -18,7 +18,7 @@ export const useEditWorkspace = () => {
         onSuccess: (data) => {
             toast.success("Workspace updated")
             queryClient.invalidateQueries({ queryKey: ["workspaces"] })
-            queryClient.invalidateQueries({ queryKey: ["workspace", data.id] })
+            queryClient.invalidateQueries({ queryKey: ["workspace", data[0].id] })
         },
         onError: (error) => {
             toast.error(error.response.data.error)

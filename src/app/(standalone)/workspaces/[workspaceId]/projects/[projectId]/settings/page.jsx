@@ -1,14 +1,6 @@
-import { getProject } from "@/app/(dashboard)/workspaces/[workspaceId]/projects/query";
-import { EditProjectForm } from "@/components/projects/project-edit-form";
+import { ProjectIdSettingsClient } from "./client";
 
-const ProjectSettingsPage = async ({ params }) => {
-    const initialValues = await getProject({
-        projectId: params.projectId
-    });
-    return (
-        <div className="w-full lg:max-w-xl">
-            <EditProjectForm initialValues={initialValues}/>
-        </div>
-    )
+const ProjectSettingsPage = async () => {
+    return <ProjectIdSettingsClient/>
 }
 export default ProjectSettingsPage;

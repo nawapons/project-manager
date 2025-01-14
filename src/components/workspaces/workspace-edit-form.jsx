@@ -49,7 +49,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const origin = window.location.origin;
-            const invitePath = `/workspaces/${initialValues.data[0].id}/join/${initialValues.data[0].inviteCode}`;
+            const invitePath = `/workspaces/${initialValues.id}/join/${initialValues.inviteCode}`;
             setFullInviteHref(`${origin}${invitePath}`);
         }
     }, [initialValues]);
@@ -57,8 +57,8 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
     const form = useForm({
         resolver: zodResolver(updateWorkspaceSchema),
         defaultValues: {
-            ...initialValues.data[0],
-            image: initialValues.data[0].imageUrl ?? "",
+            ...initialValues,
+            image: initialValues.imageUrl ?? "",
         }
     })
 
@@ -66,7 +66,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
         const ok = await confirmDelete()
         if (!ok) return;
         deleteWorkspace({
-            param: { workspaceId: initialValues.data[0].id }
+            param: { workspaceId: initialValues.id }
         }, {
             onSuccess: () => {
                 router.push("/")
@@ -80,12 +80,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
         }
         editWorkspace({
             form: finalValues,
-            param: { workspaceId: initialValues.data[0].id }
-        }, {
-            onSuccess: (response) => {
-                form.reset();
-                router.push(`/workspaces/${response[0].id}`)
-            }
+            param: { workspaceId: initialValues.id }
         })
     }
     const handleImageChange = (e) => {
@@ -96,7 +91,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
         }
     }
 
-    // const fullInviteHref = `"${window.location.origin}"/workspaces/${initialValues.data[0].id}/join/${initialValues.data[0].inviteCode}`
+    // const fullInviteHref = `"${window.location.origin}"/workspaces/${initialValues.id}/join/${initialValues.inviteCode}`
     const handleCopyInviteCode = (e) => {
         navigator.clipboard.writeText(fullInviteHref)
             .then(() => toast.success("Copy Invite Code"))
@@ -107,7 +102,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
         const ok = await confirmReset();
         if (!ok) return;
         resetInviteCode({
-            param: { workspaceId: initialValues.data[0].id }
+            param: { workspaceId: initialValues.id }
         }, {
             onSuccess: () => {
                 router.refresh();
@@ -122,12 +117,12 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
             <ResetInviteCodeDialog />
             <Card className="w-full h-full shadow-none border-none">
                 <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
-                    <Button size="sm" variant="secondary" onClick={onCancel ? onCancel : () => router.push(`/workspaces/${initialValues.data[0].id}`)}>
+                    <Button size="sm" variant="secondary" onClick={onCancel ? onCancel : () => router.push(`/workspaces/${initialValues.id}`)}>
                         <ArrowLeftIcon className="size-4 mr-2" />
                         Back
                     </Button>
                     <CardTitle className="text-xl font-bold">
-                        {initialValues.data[0].name}
+                        {initialValues.name}
                     </CardTitle>
                 </CardHeader>
                 <div className="px-7">

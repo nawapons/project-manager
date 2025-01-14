@@ -3,7 +3,7 @@ import { RiAddCircleFill } from "react-icons/ri"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { useCreateWorkspaceModal } from "../workspaces/hooks/use-create-workspace"
 import { WorkspaceAvatar } from "../workspaces/components/workspace-avatar"
-import { useGetWorkspaces } from "../workspaces/api/use-get-workspace"
+import { useGetWorkspaces } from "../workspaces/api/use-get-workspaces"
 import { useRouter } from "next/navigation"
 import { useWorkspaceId } from "../workspaces/hooks/use-workspace-id"
 export const WorkspaceSwitcher = () => {

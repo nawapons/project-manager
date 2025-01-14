@@ -15,9 +15,10 @@ export const useEditProject = () => {
             })
             return await response.data.data;
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
             toast.success("Project updated")
             queryClient.invalidateQueries({ queryKey: ["projects"] })
+            queryClient.invalidateQueries({ queryKey: ["project",data[0].id] })
         },
         onError: (error) => {
             toast.error(error.response.data.error)

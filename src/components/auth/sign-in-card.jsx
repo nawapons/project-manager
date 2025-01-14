@@ -33,8 +33,6 @@ export const SignInCard = ({ setState }) => {
             password: ""
         }
     })
-    const {mutate,isPending} = useLogin()
-
     const onSubmit = async (values) => {
         mutate({values})
     }

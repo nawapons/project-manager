@@ -63,14 +63,7 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
         mutate({
             form: finalValues,
             param: { projectId: initialValues[0].id }
-        }, {
-            onSuccess: () => {
-                form.reset()
-                router.refresh()
-            }
         })
-
-
     }
 
     const handleImageChange = (e) => {
