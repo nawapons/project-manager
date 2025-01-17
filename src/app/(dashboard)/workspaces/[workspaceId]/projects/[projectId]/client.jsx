@@ -1,7 +1,9 @@
 "use client"
+import { Analytics } from "@/components/analytics";
 import { PageError } from "@/components/page-error";
 import { PageLoader } from "@/components/page-loader";
 import { useGetProject } from "@/components/projects/api/use-get-project";
+import { useGetProjectAnalytics } from "@/components/projects/api/use-get-project-analytics";
 import { ProjectAvatar } from "@/components/projects/components/project-avatar";
 import { useProjectId } from "@/components/projects/hooks/use-project-id";
 import { TaskViewSwitcher } from "@/components/tasks/task-view-switcher";
@@ -11,31 +13,35 @@ import Link from "next/link";
 
 export const ProjectIdClient = () => {
     const projectId = useProjectId();
-    console.log(projectId)
-    const { data,isLoading } = useGetProject({ projectId })
+    const { data: project, isLoading: isLoadingProject } = useGetProject({ projectId })
+    const { data: analytics, isLoading: isLoadingAnalytics } = useGetProjectAnalytics({ projectId })
 
-    if(isLoading){
-        return <PageLoader/>
+    const isLoading = isLoadingProject || isLoadingAnalytics;
+    if (isLoading) {
+        return <PageLoader />
     }
-    if(!data) {
-        return <PageError message="Project not found!"/>
+    if (!project) {
+        return <PageError message="Project not found!" />
     }
     return (
         <div className="flex flex-col gap-y-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-x-2">
-                    <ProjectAvatar className="size-8" image={data[0].imageUrl} name={data[0].name} />
-                    <p className="text-lg font-semibold">{data[0].name}</p>
+                    <ProjectAvatar className="size-8" image={project[0].imageUrl} name={project[0].name} />
+                    <p className="text-lg font-semibold">{project[0].name}</p>
                 </div>
                 <div>
                     <Button variant="secondary" size="sm" asChild>
-                        <Link href={`/workspaces/${data[0].workspacesId}/projects/${data[0].id}/settings`}>
+                        <Link href={`/workspaces/${project[0].workspacesId}/projects/${project[0].id}/settings`}>
                             <PencilIcon className="size-4 mr-2" />
                             Edit Project
                         </Link>
                     </Button>
                 </div>
             </div>
+            {analytics ? (
+                <Analytics data={analytics} />
+            ) : null}
             <TaskViewSwitcher hideProjectFilter />
         </div>
     )

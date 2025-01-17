@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export const useResetInviteCode = () => {
+    const router = useRouter();
     const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: async ({ param }) => {
@@ -16,6 +18,7 @@ export const useResetInviteCode = () => {
         },
         onSuccess: (data) => {
             toast.success("Invite Code Reset")
+            router.refresh();
             queryClient.invalidateQueries({ queryKey: ["workspaces"] })
             queryClient.invalidateQueries({ queryKey: ["workspace", data.id] })
         },

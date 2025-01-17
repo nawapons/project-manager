@@ -46,10 +46,6 @@ export const MembersList = () => {
         if (!ok) return;
         deleteMember({
             param: { memberId: memberId }
-        }, {
-            onSuccess: () => {
-                router.refresh();
-            }
         })
     }
 

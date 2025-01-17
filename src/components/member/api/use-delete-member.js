@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 export const useDeleteMember = () => {
+    const router = useRouter();
     const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: async ({ param }) => {
@@ -18,6 +20,7 @@ export const useDeleteMember = () => {
         },
         onSuccess: () => {
             toast.success("Member deleted")
+            router.refresh();
             queryClient.invalidateQueries({ queryKey: ["members"] })
         },
         onError: (error) => {
