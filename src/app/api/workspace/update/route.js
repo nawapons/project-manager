@@ -9,7 +9,6 @@ export async function POST(request) {
     const userId = (await supabase.auth.getUser()).data.user.id
 
     const body = await request.formData();
-    console.log(body)
     const name = body.get("form[name]")
     const image = body.get("form[image]")
     const workspaceId = body.get("param[workspaceId]")
@@ -25,7 +24,6 @@ export async function POST(request) {
     if (image instanceof File) {
         const { error } = await supabase.storage.from('workspaces').upload(newImageName, image)
         if (error) {
-            console.log('error, upload file failed', error)
             return NextResponse.json({ message: "upload file failed" }, { status: 200 })
         }
         const { data } = supabase.storage.from('workspaces').getPublicUrl(newImageName)

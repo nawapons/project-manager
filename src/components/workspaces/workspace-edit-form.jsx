@@ -213,9 +213,9 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                             <SeparatorDotted />
                             <div className="flex justify-between items-center p-2">
 
-                                <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")} disabled={isEditingWorkspace || isDeletingWorkspace}>Cancel</Button>
+                                <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")} disabled={isEditingWorkspace || isDeletingWorkspace || isResettingInviteCode}>Cancel</Button>
 
-                                <Button type="submit" variant="primary" disabled={isEditingWorkspace || isDeletingWorkspace}>Save Changes</Button>
+                                <Button type="submit" variant="primary" disabled={isEditingWorkspace || isDeletingWorkspace || isResettingInviteCode}>Save Changes</Button>
                             </div>
                         </form>
                     </Form>
@@ -230,7 +230,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                             <Input disabled type="text" placeholder="Invite Code" value={fullInviteHref} />
-                            <Button onClick={handleCopyInviteCode} type="button" className="size-9" variant="secondary">
+                            <Button disabled={isEditingWorkspace || isDeletingWorkspace || isResettingInviteCode} onClick={handleCopyInviteCode} type="button" className="size-9" variant="secondary">
                                 <CopyIcon className="size-5" />
                             </Button>
                         </div>
@@ -239,6 +239,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                             size="sm"
                             type="button"
                             variant="warning"
+                            disabled={isEditingWorkspace || isDeletingWorkspace || isResettingInviteCode}
                             onClick={handleResetInviteCode}>
                             Reset Invite Code
                         </Button>
@@ -256,7 +257,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                             size="sm"
                             variant="destructive"
                             type="button"
-                            disabled={isEditingWorkspace || isDeletingWorkspace}
+                            disabled={isEditingWorkspace || isDeletingWorkspace || isResettingInviteCode}
                             onClick={handleDelete}>
                             Delete Workspace
                         </Button>

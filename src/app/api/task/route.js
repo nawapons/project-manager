@@ -125,7 +125,6 @@ export async function PATCH(request) {
     const body = await request.json();
     const declareValue = createTaskSchema.partial().parse(body.json)
     const { name, status, description, projectsId, dueDate, assigneeId } = declareValue 
-    console.log(declareValue)
     const taskId = body.params.taskId
 
     const { data: existingTask } = await supabase.from("tasks").select("*").eq("id", taskId)
@@ -141,9 +140,6 @@ export async function PATCH(request) {
         assigneeId: assigneeId,
         description: description,
     }).eq("id", taskId).select()
-    console.log(name, status, description, projectsId, dueDate, assigneeId)
-    console.log("TASK ID =>", taskId)
-    console.log(task)
     return NextResponse.json({ data: task }, { status: 200 })
 
 }

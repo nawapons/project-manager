@@ -15,7 +15,6 @@ export async function GET() {
 
     const { data, error } = await supabase.from("workspaces").select("*").in("id", workspacesIds).order("created_at",{ascending: false})
     if (error) {
-        console.log("fetch Workspaces failed", error)
         return null
     }
     return NextResponse.json({ data }, { status: 200 })

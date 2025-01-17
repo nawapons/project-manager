@@ -19,7 +19,6 @@ export async function GET(request) {
         }
 
         const { data } = await supabase.from("projects").select("*").eq("workspacesId", workspaceId).order("created_at", { ascending: false })
-        console.log(data)
         return NextResponse.json({ data }, { status: 200 })
     } catch (error) {
         return NextResponse.json({ message: "Failed to get project!" }, { status: 500 })
@@ -41,7 +40,6 @@ export async function POST(request) {
         if (image instanceof File) {
             const { error } = await supabase.storage.from('projects').upload(newImageName, image)
             if (error) {
-                console.log('error, upload file failed', error)
                 return NextResponse.json({ message: "upload file failed" }, { status: 401 })
             }
             const { data } = supabase.storage.from('projects').getPublicUrl(newImageName)
@@ -49,7 +47,6 @@ export async function POST(request) {
         }
 
         const { data: checkExists } = await supabase.from('projects').select('*').eq('name', name).eq('workspacesId', workspacesId)
-        console.log(checkExists)
         if (checkExists.length > 0) {
             return NextResponse.json({ message: "project is already exists" }, { status: 401 })
         }
@@ -59,7 +56,6 @@ export async function POST(request) {
             imageUrl: imageUrl
         }).select()
         if (insertError) {
-            console.log('insert Error', insertError)
             return NextResponse.json({ message: "add new project failed" }, { status: 401 })
         }
         return NextResponse.json({ data: newProject }, { status: 200 })
@@ -76,7 +72,6 @@ export async function PATCH(request) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
     const userId = (await supabase.auth.getUser()).data.user.id
-    console.log(body)
     const { data: existingProject } = await supabase.from("projects").select("*").eq("id", projectId)
 
     const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", existingProject[0].workspacesId)
@@ -92,7 +87,6 @@ export async function PATCH(request) {
     if (image instanceof File) {
         const { error } = await supabase.storage.from('projects').upload(newImageName, image)
         if (error) {
-            console.log('error, upload file failed', error)
             return NextResponse.json({ message: "upload file failed" }, { status: 200 })
         }
         const { data } = supabase.storage.from('projects').getPublicUrl(newImageName)
@@ -122,7 +116,6 @@ export async function DELETE(request) {
         if (!member) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
         }
-        console.log(projectId)
         await supabase.from("projects").delete().eq("id", projectId)
         return NextResponse.json({ data: { id: existingProject[0].id } }, { status: 200 })
     } catch (error) {

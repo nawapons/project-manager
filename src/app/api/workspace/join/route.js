@@ -24,7 +24,6 @@ export async function POST(request) {
         }).select()
         return NextResponse.json({ data: { id: data[0].workspacesId } }, { status: 200 })
     } catch (error) {
-        console.log(error)
         return NextResponse.json({ message: "Failed to join workspace!" }, { status: 500 })
     }
 }

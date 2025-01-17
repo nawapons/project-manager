@@ -13,6 +13,5 @@ export async function GET(request) {
     if (!member) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
 
     const { data: workspace } = await supabase.from("workspaces").select("*").eq("id", workspaceId)
-    console.log(workspace)
     return NextResponse.json({ data: workspace }, { status: 200 })
 }
