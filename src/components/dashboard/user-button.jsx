@@ -17,21 +17,15 @@ import { Settings } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getCurrent } from "../auth/api/use-get-current";
+import { useLogOut } from "../auth/api/use-logout";
 
 
 export const UserButton = () => {
     const router = useRouter();
-    const [data, setData] = useState()
-    const supabase = createClient();
-    const fetchUserData = async () => {
-        const { data: { user } } = await supabase.auth.getUser()
-        setData(user.user_metadata)
-    }
-    useEffect(() => {
-        fetchUserData()
-    }, [])
-
-    if (!data) return (
+    const {data, isLoading} = getCurrent();
+    const {mutate,isLoading: isLoggedOut} = useLogOut();
+    if (isLoading) return (
         <div className="size-10 rounded-full flex items-center justify-center bg-neutral-200 border border-neutral-300">
             <Loader className="size-4 animate-spin text-muted-foreground" />
         </div>
@@ -40,8 +34,7 @@ export const UserButton = () => {
     const avartarFallback = name ? name.charAt(0).toUpperCase() : email.charAt(0).toUpperCase() ?? "U";
 
     const signOut = async () => {
-        await supabase.auth.signOut()
-        router.push("/")
+        mutate();
     }
 
     return (

@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 export const useLogin = () => {
     const router = useRouter();
+    const queryClient = useQueryClient()
     const mutation = useMutation({
         mutationFn: async ({values})=>{
             const response = await axios.post("/api/auth/login",{
