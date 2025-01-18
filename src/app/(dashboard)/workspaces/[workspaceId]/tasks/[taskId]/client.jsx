@@ -1,6 +1,7 @@
 "use client"
 
 import { PageLoader } from "@/components/page-loader"
+import { PageError } from "@/components/page-error"
 import { useGetTask } from "@/components/tasks/api/use-get-task"
 import { TaskBreadcrumbs } from "@/components/tasks/components/task-breadcrumbs"
 import { TaskDescription } from "@/components/tasks/components/task-description"

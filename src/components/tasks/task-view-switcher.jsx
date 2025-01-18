@@ -6,7 +6,7 @@ import { SeparatorDotted } from "../ui/separator-dotted"
 import { useGetTasks } from "./api/use-get-tasks"
 import { useCreateTaskModal } from "./hooks/use-create-task"
 import { useWorkspaceId } from "../workspaces/hooks/use-workspace-id"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback } from "react"
 import { useQueryState } from "nuqs"
 import { Loader } from "lucide-react"
 import { DataFilters } from "./data-filters"
@@ -16,6 +16,7 @@ import { columns } from "./components/columns"
 import { DataKanban } from "./components/data-kanban"
 import { useBulkEditTasks } from "./api/use-bulk-edit-tasks"
 import { DataCalendar } from "./components/data-calendar"
+import { useProjectId } from "../projects/hooks/use-project-id"
 
 export const TaskViewSwitcher = ({ hideProjectFilter }) => {
     const [view, setView] = useQueryState("task-view", {
@@ -25,9 +26,10 @@ export const TaskViewSwitcher = ({ hideProjectFilter }) => {
         status, assigneeId, projectId, dueDate,
     }] = useTaskFilters();
     const workspaceId = useWorkspaceId()
+    const paramsProjectId = useProjectId();
     const { open, } = useCreateTaskModal();
     const { mutate: bulkUpdate } = useBulkEditTasks()
-    const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({ workspaceId, projectId, status, assigneeId, dueDate })
+    const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({ workspaceId, projectId: paramsProjectId || projectId, status, assigneeId, dueDate })
 
     const onKanbanChange = useCallback((tasks) => {
         bulkUpdate({

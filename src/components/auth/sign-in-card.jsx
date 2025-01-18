@@ -1,4 +1,3 @@
-import { z } from "zod"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import { Separator } from "@/components/ui/separator"
@@ -16,10 +15,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import axios from "axios"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import OneTapComponent from "./sign-in-google"
 import { createClient } from "@/utils/supabase/client"
 import { useLogin } from "./api/use-login"
 export const SignInCard = ({ setState }) => {
@@ -40,7 +36,7 @@ export const SignInCard = ({ setState }) => {
         await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `https://zvomobixtewrgsmyijry.supabase.co/auth/v1/callback`
+                redirectTo: 'https://zvomobixtewrgsmyijry.supabase.co/auth/v1/callback'
             }
         })
     }
