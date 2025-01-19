@@ -1,14 +1,14 @@
 "use client"
 import { RiAddCircleFill } from "react-icons/ri";
-import { getProjects, useGetProjects } from "../../projects/api/use-get-projects";
+import { useGetProjects } from "../projects/api/use-get-projects";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { ProjectAvatar } from "../../projects/components/project-avatar";
-import { useCreateProjectModal } from "../../projects/hooks/use-create-project";
-import { ProjectAddModal } from "../../projects/components/project-add-modal";
-import { ProjectSkeleton } from "../../skeleton/project-skeleton";
+import { ProjectAvatar } from "../projects/components/project-avatar";
+import { useCreateProjectModal } from "../projects/hooks/use-create-project";
+import { ProjectAddModal } from "../projects/components/project-add-modal";
+import { ProjectSkeleton } from "../skeleton/project-skeleton";
 
 export const Projects = () => {
   const pathname = usePathname();

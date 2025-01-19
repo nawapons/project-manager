@@ -9,10 +9,8 @@ import { loginSchema } from '@/schema/userSchema'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
-    FormLabel,
     FormMessage,
 } from "@/components/ui/form"
 import { useRouter } from "next/navigation"
@@ -20,7 +18,6 @@ import { createClient } from "@/utils/supabase/client"
 import { useLogin } from "../api/use-login"
 export const SignInCard = ({ setState }) => {
     const supabase = createClient()
-    const router = useRouter();
     const {mutate,isPending} = useLogin()
     const form = useForm({
         resolver: zodResolver(loginSchema),
@@ -84,7 +81,7 @@ export const SignInCard = ({ setState }) => {
                         <FcGoogle />
                         Sign in with Google</Button>
                 </div>
-                <p className="text-center text-muted-foreground text-sm">Don't have account ? <span onClick={() => setState("signUp")} className="text-blue-500 hover:underline cursor-pointer">Sign up</span></p>
+                <p className="text-center text-muted-foreground text-sm">{`don't have any account?`} <span onClick={() => setState("signUp")} className="text-blue-500 hover:underline cursor-pointer">Sign up</span></p>
             </CardContent>
         </Card>
     )

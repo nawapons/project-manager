@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export const getCurrent = () => {
+export const useGetCurrent = () => {
     const query = useQuery({
         queryKey: ["current"],
         queryFn: async () => {

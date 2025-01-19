@@ -1,6 +1,6 @@
 import { AnalyticsCard } from "./analytics-card";
-import { ScrollArea,ScrollBar } from "../components/ui/scroll-area";
-import { SeparatorDotted } from "../components/ui/separator-dotted";
+import { ScrollArea,ScrollBar } from "@/components/ui/scroll-area";
+import { SeparatorDotted } from "@/components/ui/separator-dotted";
 
 export const Analytics = ({ data }) => {
     if (!data) return null;

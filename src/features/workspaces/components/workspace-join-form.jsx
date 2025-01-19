@@ -6,13 +6,11 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { SeparatorDotted } from "../../../components/ui/separator-dotted"
-import { Button } from "../../../components/ui/button"
+import { SeparatorDotted } from "@/components/ui/separator-dotted"
+import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useInviteCode } from "../hooks/use-invite-code"
-import axios from "axios"
 import { useWorkspaceId } from "../hooks/use-workspace-id"
-import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { useJoinWorkspace } from "../api/use-join-workspace"
 

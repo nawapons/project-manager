@@ -3,7 +3,6 @@ import {
     DragDropContext,
     Droppable,
     Draggable,
-    DropResult,
 } from "@hello-pangea/dnd"
 import { TaskStatus } from "@/schema/taskSchema"
 import { KanbanColumnHeader } from "./kanban-column-header"

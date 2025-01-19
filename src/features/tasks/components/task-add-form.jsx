@@ -1,7 +1,7 @@
 "use client"
-import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card"
-import { SeparatorDotted } from "../../../components/ui/separator-dotted"
-import { Button } from "../../../components/ui/button"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { SeparatorDotted } from "@/components/ui/separator-dotted"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -21,7 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Input } from "../../../components/ui/input"
+import { Input } from "@/components/ui/input"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { createTaskSchema, TaskStatus } from "@/schema/taskSchema"
 import { MemberAvatar } from "../../member/components/member-avatar"

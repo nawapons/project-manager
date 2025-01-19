@@ -1,5 +1,5 @@
 "use client"
-import { ResponsiveModal } from "../../dashboard/components/responsive-modal";
+import { ResponsiveModal } from "../../dashboard/responsive-modal";
 import { useEditTaskModal } from "../hooks/use-edit-task";
 import { EditTaskFormWrapper } from "./task-edit-form-wrapper";
 

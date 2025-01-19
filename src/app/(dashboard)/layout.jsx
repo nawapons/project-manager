@@ -1,7 +1,7 @@
-import { SidebarComponents } from '@/features/dashboard/components/sidebar';
+import { SidebarComponents } from '@/features/dashboard/sidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import React from 'react'
-import { Navbar } from '@/features/dashboard/components/navbar';
+import { Navbar } from '@/features/dashboard/navbar';
 import { WorkspaceAddModal } from '@/features/workspaces/components/workspace-add-modal';
 import { CreateTaskModal } from '@/features/tasks/components/task-add-modal';
 import { EditTaskModal } from '@/features/tasks/components/task-edit-modal';

@@ -1,7 +1,7 @@
 "use client"
-import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card"
-import { SeparatorDotted } from "../../../components/ui/separator-dotted"
-import { Button } from "../../../components/ui/button"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { SeparatorDotted } from "@/components/ui/separator-dotted"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -14,12 +14,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { Input } from "../../../components/ui/input"
-import { Avatar, AvatarFallback } from "../../../components/ui/avatar"
+import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ImageIcon } from "lucide-react"
 import { useRef } from "react"
-import axios from "axios"
-import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { createProjectSchema } from "@/schema/projectSchema"
@@ -155,9 +153,9 @@ export const CreateProjectForm = ({ onCancel }) => {
                         <SeparatorDotted />
                         <div className="flex justify-between items-center p-2">
 
-                            <Button type="button" onClick={onCancel} className={cn(!onCancel && "invisible")}>Cancel</Button>
+                            <Button disabled={isPending} type="button" onClick={onCancel} className={cn(!onCancel && "invisible")}>Cancel</Button>
 
-                            <Button type="submit">Create project</Button>
+                            <Button disabled={isPending} type="submit">Create project</Button>
                         </div>
                     </form>
                 </Form>

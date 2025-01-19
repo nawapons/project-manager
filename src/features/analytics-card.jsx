@@ -1,6 +1,6 @@
 import { FaCaretDown, FaCaretUp } from "react-icons/fa"
 import { cn } from "@/lib/utils"
-import { CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 export const AnalyticsCard = ({
     title, value, variant, increaseValue 
 }) => {

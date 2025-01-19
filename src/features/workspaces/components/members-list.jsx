@@ -4,7 +4,6 @@ import { useWorkspaceId } from "../hooks/use-workspace-id"
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -17,19 +16,15 @@ import { MemberAvatar } from "@/features/member/components/member-avatar"
 import { MoreVerticalIcon } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import axios from "axios"
-import { toast } from "sonner"
 import { useConfirm } from "@/hooks/use-confirm"
-import { useRouter } from "next/navigation"
 import { useDeleteMember } from "@/features/member/api/use-delete-member"
 import { useEditMember } from "@/features/member/api/use-edit-members"
 export const MembersList = () => {
-    const router = useRouter()
     const workspaceId = useWorkspaceId()
 
     const { data: members, isLoading: isMemberLoading } = useGetMembers({ workspaceId })
-    const { mutate: updateMember, isLoading: isUpdattingMember } = useEditMember()
-    const { mutate: deleteMember, isLoading: isDeletingMember } = useDeleteMember()
+    const { mutate: updateMember } = useEditMember()
+    const { mutate: deleteMember } = useDeleteMember()
     const [DeleteDialog, confirm] = useConfirm(
         "Remove member?",
         "This member will be removed from this workspace",

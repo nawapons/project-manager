@@ -1,7 +1,7 @@
 "use client"
-import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card"
-import { SeparatorDotted } from "../../../components/ui/separator-dotted"
-import { Button } from "../../../components/ui/button"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { SeparatorDotted } from "@/components/ui/separator-dotted"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -14,12 +14,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { Input } from "../../../components/ui/input"
-import { Avatar, AvatarFallback } from "../../../components/ui/avatar"
+import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ImageIcon } from "lucide-react"
 import { useRef } from "react"
-import axios from "axios"
-import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ArrowLeftIcon } from "lucide-react"
 import { useConfirm } from "@/hooks/use-confirm"
@@ -193,7 +191,7 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
                             size="sm"
                             variant="destructive"
                             type="button"
-                            disabled={isPending}
+                            disabled={isPending || deletingProject}
                             onClick={handleDelete}>
                             Delete Project
                         </Button>

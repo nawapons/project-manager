@@ -9,7 +9,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 export const MobileSidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const handleClose = () => setIsOpen(false);
     const pathname = usePathname();
 
     useEffect(() => {

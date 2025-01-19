@@ -1,10 +1,9 @@
 "use client"
 import { Loader } from "lucide-react";
 import { useGetMembers } from "../../member/api/use-get-members";
-import { getProjects, useGetProject, useGetProjects } from "../../projects/api/use-get-projects"
-import { Card, CardContent } from "../../../components/ui/card";
+import {useGetProjects } from "../../projects/api/use-get-projects"
+import { Card, CardContent } from "@/components/ui/card";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
-import { useEffect, useState } from "react";
 import { CreateTaskForm } from "./task-add-form";
 
 export const CreateTaskFormWrapper = ({

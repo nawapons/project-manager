@@ -1,7 +1,7 @@
 "use client"
-import { Card, CardHeader, CardTitle, CardContent } from "../../../components/ui/card"
-import { SeparatorDotted } from "../../../components/ui/separator-dotted"
-import { Button } from "../../../components/ui/button"
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { SeparatorDotted } from "@/components/ui/separator-dotted"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -15,11 +15,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { Input } from "../../../components/ui/input"
-import { Avatar, AvatarFallback } from "../../../components/ui/avatar"
+import { Input } from "@/components/ui/input"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ImageIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import axios from "axios"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { ArrowLeftIcon } from "lucide-react"
@@ -92,6 +91,7 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
 
     // const fullInviteHref = `"${window.location.origin}"/workspaces/${initialValues.id}/join/${initialValues.inviteCode}`
     const handleCopyInviteCode = (e) => {
+        e.preventDefault();
         navigator.clipboard.writeText(fullInviteHref)
             .then(() => toast.success("Copy Invite Code"))
 

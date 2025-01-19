@@ -1,6 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
@@ -59,7 +58,7 @@ export async function DELETE(request) {
         const memberId = url.searchParams.get("memberId")
 
         const { data: memberToDelete } = await supabase.from("members").select("*").eq("id", memberId)
-        const { data: allMembersInWorkspace } = await supabase.from("members").select("*").eq("workspacesId", memberToDelete[0].workspacesId)
+        // const { data: allMembersInWorkspace } = await supabase.from("members").select("*").eq("workspacesId", memberToDelete[0].workspacesId)
 
         const { data: member } = await supabase.from("members").select("*").eq("workspacesId", memberToDelete[0].workspacesId).eq("userId", userId)
         if (!member) {
