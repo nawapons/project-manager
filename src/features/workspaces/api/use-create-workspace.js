@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import {useMutation, useQueryClient} from "@tanstack/react-query"
 import axios from "axios";
-import { toast } from "sonner";
+import {toast} from "sonner";
 
 export const useCreateWorkspace = () => {
     const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: async ({ form }) => {
+    return useMutation({
+        mutationFn: async ({form}) => {
             const response = await axios.post("/api/workspace/create", {
                 form
             }, {
@@ -17,11 +17,10 @@ export const useCreateWorkspace = () => {
         },
         onSuccess: () => {
             toast.success("Workspace created");
-            queryClient.invalidateQueries({ queryKey: ["workspaces"] })
+            queryClient.invalidateQueries({queryKey: ["workspaces"]})
         },
         onError: (error) => {
             toast.error(error.response.data.error);
         }
-    })
-    return mutation;
+    });
 }

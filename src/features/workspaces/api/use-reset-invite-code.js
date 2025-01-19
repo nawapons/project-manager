@@ -1,13 +1,13 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import {useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 export const useResetInviteCode = () => {
     const router = useRouter();
     const queryClient = useQueryClient()
-    const mutation = useMutation({
-        mutationFn: async ({ param }) => {
+    return useMutation({
+        mutationFn: async ({param}) => {
             const response = await axios.patch("/api/workspace/update", {
                 workspaceId: param.workspaceId
             })
@@ -19,12 +19,11 @@ export const useResetInviteCode = () => {
         onSuccess: (data) => {
             toast.success("Invite Code Reset")
             router.refresh();
-            queryClient.invalidateQueries({ queryKey: ["workspaces"] })
-            queryClient.invalidateQueries({ queryKey: ["workspace", data.id] })
+            queryClient.invalidateQueries({queryKey: ["workspaces"]})
+            queryClient.invalidateQueries({queryKey: ["workspace", data.id]})
         },
         onError: () => {
             toast.error("Failed to update inviteCode")
         }
-    })
-    return mutation;
+    });
 }

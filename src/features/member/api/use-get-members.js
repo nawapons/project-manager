@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 
 export const useGetMembers = ({
     workspaceId
 }) => {
-    const query = useQuery({
+    return useQuery({
         queryKey: ["members", workspaceId],
         queryFn: async () => {
             const response = await axios.get("/api/member/", {
@@ -17,8 +17,7 @@ export const useGetMembers = ({
             }
             return await response.data.data;
         }
-    })
-    return query;
+    });
 }
 
 // import axios from "axios"

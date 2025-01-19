@@ -1,12 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import {useMutation, useQueryClient} from "@tanstack/react-query"
 import axios from "axios"
-import { toast } from "sonner"
+import {toast} from "sonner"
 
 export const useCreateProject = () => {
     const queryClient = useQueryClient();
-    const mutation = useMutation(
+    return useMutation(
         {
-            mutationFn: async ({ form }) => {
+            mutationFn: async ({form}) => {
                 const response = await axios.post("/api/project/", {
                     form
                 }, {
@@ -21,11 +21,10 @@ export const useCreateProject = () => {
             },
             onSuccess: () => {
                 toast.success("Project created")
-                queryClient.invalidateQueries({ queryKey: ["projects"] })
+                queryClient.invalidateQueries({queryKey: ["projects"]})
             },
-            onError: (error)=>{
+            onError: (error) => {
                 toast.error(error.response.data.message)
             }
-        })
-    return mutation;
+        });
 } 

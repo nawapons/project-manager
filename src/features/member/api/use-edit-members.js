@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import {useMutation, useQueryClient} from "@tanstack/react-query"
 import axios from "axios"
-import { toast } from "sonner"
+import {toast} from "sonner"
 
 export const useEditMember = () => {
     const queryClient = useQueryClient()
-    const mutation = useMutation({
-        mutationFn: async ({ memberId, role }) => {
+    return useMutation({
+        mutationFn: async ({memberId, role}) => {
             const response = await axios.patch("/api/member/", {
                 memberId, role
             })
@@ -16,11 +16,10 @@ export const useEditMember = () => {
         },
         onSuccess: () => {
             toast.success("Member updated")
-            queryClient.invalidateQueries({ queryKey: ["members"] })
+            queryClient.invalidateQueries({queryKey: ["members"]})
         },
         onError: (error) => {
             toast.error(error.response.data.message)
         }
-    })
-    return mutation;
+    });
 }

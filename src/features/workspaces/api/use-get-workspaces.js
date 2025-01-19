@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 
 export const useGetWorkspaces = () => {
-    const query = useQuery({
+    return useQuery({
         queryKey: [
             "workspaces"
         ],
@@ -13,6 +13,5 @@ export const useGetWorkspaces = () => {
             }
             return await response.data.data;
         }
-    })
-    return query;
+    });
 }

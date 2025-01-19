@@ -1,12 +1,12 @@
-import { useMutation } from "@tanstack/react-query"
+import {useMutation} from "@tanstack/react-query"
 import axios from "axios";
-import { toast } from "sonner";
+import {toast} from "sonner";
 
 
 export const useRegister = () => {
-    const mutation = useMutation({
-        mutationFn: async ({values})=>{
-            const response = await axios.post("/api/auth/register",{
+    return useMutation({
+        mutationFn: async ({values}) => {
+            const response = await axios.post("/api/auth/register", {
                 values
             })
             return await response.data.data;
@@ -17,6 +17,5 @@ export const useRegister = () => {
         onError: (error) => {
             toast.error(error.response.data.message)
         }
-    })
-    return mutation;
+    });
 }

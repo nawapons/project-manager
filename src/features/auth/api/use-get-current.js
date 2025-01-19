@@ -1,9 +1,8 @@
-
-import { useQuery } from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 
 export const useGetCurrent = () => {
-    const query = useQuery({
+    return useQuery({
         queryKey: ["current"],
         queryFn: async () => {
             const response = await axios.get("/api/auth/");
@@ -13,5 +12,4 @@ export const useGetCurrent = () => {
             return await response.data.data
         }
     })
-    return query
 }

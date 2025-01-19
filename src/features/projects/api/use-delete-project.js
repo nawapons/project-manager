@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import {useMutation, useQueryClient} from "@tanstack/react-query"
 import axios from "axios";
-import { toast } from "sonner";
+import {toast} from "sonner";
 
 export const useDeleteProject = () => {
     const queryClient = useQueryClient();
-    const mutation = useMutation({
-        mutationFn: async ({ param }) => {
+    return useMutation({
+        mutationFn: async ({param}) => {
             const response = await axios.delete("/api/project/", {
                 params: {
                     projectId: param.projectId
@@ -18,13 +18,12 @@ export const useDeleteProject = () => {
         },
         onSuccess: (data) => {
             toast.success("project deleted")
-            queryClient.invalidateQueries({ queryKey: ["projects"] })
-            queryClient.invalidateQueries({ queryKey: ["tasks"] })
-            queryClient.invalidateQueries({ queryKey: ["project", data.id] })
+            queryClient.invalidateQueries({queryKey: ["projects"]})
+            queryClient.invalidateQueries({queryKey: ["tasks"]})
+            queryClient.invalidateQueries({queryKey: ["project", data.id]})
         },
         onError: () => {
             toast.error("Failed to delete project")
         }
-    })
-    return mutation;
+    });
 }

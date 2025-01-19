@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 
 export const useGetProject = ({
     projectId
 }) => {
-    const query = useQuery({
+    return useQuery({
         queryKey: [
             "project", projectId
         ],
@@ -19,6 +19,5 @@ export const useGetProject = ({
             }
             return await response.data.data;
         }
-    })
-    return query;
+    });
 }

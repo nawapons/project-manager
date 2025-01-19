@@ -13,7 +13,6 @@ import {
     FormItem,
     FormMessage,
 } from "@/components/ui/form"
-import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import { useLogin } from "../api/use-login"
 export const SignInCard = ({ setState }) => {

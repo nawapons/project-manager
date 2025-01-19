@@ -4,7 +4,7 @@ import {toast} from "sonner"
 
 export const useCreateTask = () => {
     const queryClient = useQueryClient()
-    const mutation = useMutation({
+    return useMutation({
         mutationFn: async ({json}) => {
             const response = await axios.post("/api/task", {
                 json
@@ -23,5 +23,4 @@ export const useCreateTask = () => {
             toast.error(error.response.data.message)
         }
     })
-    return mutation
 }

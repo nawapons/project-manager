@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import {useMutation, useQueryClient} from "@tanstack/react-query"
 import axios from "axios"
-import { toast } from "sonner"
+import {toast} from "sonner"
 
 export const useJoinWorkspace = () => {
     const queryClient = useQueryClient()
-    const mutation = useMutation({
-        mutationFn: async ({ workspaceId, inviteCode }) => {
+    return useMutation({
+        mutationFn: async ({workspaceId, inviteCode}) => {
             const response = await axios.post("/api/workspace/join", {
                 workspaceId: workspaceId,
                 inviteCode: inviteCode
@@ -17,12 +17,11 @@ export const useJoinWorkspace = () => {
         },
         onSuccess: (data) => {
             toast.success("Joined workspace")
-            queryClient.invalidateQueries({ queryKey: ["workspaces"] })
-            queryClient.invalidateQueries({ queryKey: ["workspace", data.id] })
+            queryClient.invalidateQueries({queryKey: ["workspaces"]})
+            queryClient.invalidateQueries({queryKey: ["workspace", data.id]})
         },
         onError: (error) => {
             toast.error(error.response.data.message);
         }
-    })
-    return mutation;
+    });
 }

@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 
 export const useGetWorkspaceInfo = ({
     workspaceId
 }) => {
-    const query = useQuery({
+    return useQuery({
         queryKey: [
             "workspace-info", workspaceId
         ],
@@ -19,6 +19,5 @@ export const useGetWorkspaceInfo = ({
             }
             return await response.data.data;
         }
-    })
-    return query;
+    });
 }
