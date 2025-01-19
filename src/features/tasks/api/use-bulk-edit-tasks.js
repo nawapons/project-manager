@@ -17,6 +17,7 @@ export const useBulkEditTasks = () => {
         onSuccess: () => {
             toast.success("Tasks updated")
             queryClient.invalidateQueries({queryKey: ["tasks"]})
+            queryClient.invalidateQueries({queryKey: ["project-analytics"]})
         },
         onError: (error) => {
             toast.error(error.response.data.message)

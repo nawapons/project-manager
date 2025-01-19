@@ -10,12 +10,18 @@ import { TaskViewSwitcher } from "@/features/tasks/components/task-view-switcher
 import { Button } from "@/components/ui/button";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
+import {AvatarStack} from "@/components/ui/avatar-stack";
 
 export const ProjectIdClient = () => {
+    const avatars = [
+        { name: "Alice Johnson" },
+        { name: "Bob Smith", }, //TODO : make member avatar
+        { name: "Charlie Brown", },
+        { name: "Diana Prince", },
+    ];
     const projectId = useProjectId();
     const { data: project, isLoading: isLoadingProject } = useGetProject({ projectId })
     const { data: analytics, isLoading: isLoadingAnalytics } = useGetProjectAnalytics({ projectId })
-
     const isLoading = isLoadingProject || isLoadingAnalytics;
     if (isLoading) {
         return <PageLoader />
@@ -29,6 +35,12 @@ export const ProjectIdClient = () => {
                 <div className="flex items-center gap-x-2">
                     <ProjectAvatar className="size-8" image={project[0].imageUrl} name={project[0].name} />
                     <p className="text-lg font-semibold">{project[0].name}</p>
+                    <AvatarStack
+                        avatars={avatars}
+                        orientation="vertical" // or "vertical"
+                        spacing="sm" // "sm", "md", "lg", or "xl"
+                        maxAvatarsAmount={3} // Number of avatars to show before "+N"
+                    />
                 </div>
                 <div>
                     <Button variant="secondary" size="sm" asChild>

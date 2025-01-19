@@ -10,11 +10,35 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { ListChecksIcon } from "lucide-react"
+import {
+    CircleCheckIcon,
+    CircleDashedIcon,
+    CircleDotDashedIcon,
+    CircleDotIcon,
+    CircleIcon,
+    ListChecksIcon
+} from "lucide-react"
 import { TaskStatus } from "@/schema/taskSchema"
 import { useTaskFilters } from "../hooks/use-task-filters"
 import { UserIcon } from "lucide-react"
 import { FolderIcon } from "lucide-react"
+const statusIconMap = {
+    [TaskStatus.BACKLOG]: (
+        <CircleDashedIcon className="size-[18px] text-pink-400" />
+    ),
+    [TaskStatus.TODO]: (
+        <CircleIcon className="size-[18px] text-red-400" />
+    ),
+    [TaskStatus.IN_PROGRESS]: (
+        <CircleDotDashedIcon className="size-[18px] text-yellow-400" />
+    ),
+    [TaskStatus.IN_REVIEW]: (
+        <CircleDotIcon className="size-[18px] text-blue-400" />
+    ),
+    [TaskStatus.DONE]: (
+        <CircleCheckIcon className="size-[18px] text-emerald-400" />
+    ),
+}
 export const DataFilters = ({ hideProjectFilter }) => {
     const workspaceId = useWorkspaceId()
 
@@ -61,11 +85,31 @@ export const DataFilters = ({ hideProjectFilter }) => {
                 <SelectContent>
                     <SelectItem value="all">All status</SelectItem>
                     <SelectSeparator />
-                    <SelectItem value={TaskStatus.BACKLOG}>Backlog</SelectItem>
-                    <SelectItem value={TaskStatus.IN_PROGRESS}>In progress</SelectItem>
-                    <SelectItem value={TaskStatus.IN_REVIEW}>In Review</SelectItem>
-                    <SelectItem value={TaskStatus.TODO}>Todo</SelectItem>
-                    <SelectItem value={TaskStatus.DONE}>Done</SelectItem>
+                    <SelectItem value={TaskStatus.BACKLOG}>
+                        <div className="flex items-center gap-x-2">
+                            {statusIconMap[TaskStatus.BACKLOG]} Backlog
+                        </div>
+                    </SelectItem>
+                    <SelectItem value={TaskStatus.IN_PROGRESS}>
+                        <div className="flex items-center gap-x-2">
+                            {statusIconMap[TaskStatus.IN_PROGRESS]} In Progress
+                        </div>
+                    </SelectItem>
+                    <SelectItem value={TaskStatus.IN_REVIEW}>
+                        <div className="flex items-center gap-x-2">
+                            {statusIconMap[TaskStatus.IN_REVIEW]} In Review
+                        </div>
+                    </SelectItem>
+                    <SelectItem value={TaskStatus.TODO}>
+                        <div className="flex items-center gap-x-2">
+                            {statusIconMap[TaskStatus.TODO]} Todo
+                        </div>
+                    </SelectItem>
+                    <SelectItem value={TaskStatus.DONE}>
+                        <div className="flex items-center gap-x-2">
+                            {statusIconMap[TaskStatus.DONE]} Done
+                        </div>
+                    </SelectItem>
                 </SelectContent>
             </Select>
             <Select
