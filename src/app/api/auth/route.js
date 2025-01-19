@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-    console.log("API OK")
     const cookieClient = cookies();
     const supabase = createClient(cookieClient)
     const {

@@ -1,19 +1,19 @@
 "use client"
-import { Analytics } from "@/components/analytics"
-import { useGetMembers } from "@/components/member/api/use-get-members"
-import { MemberAvatar } from "@/components/member/components/member-avatar"
-import { PageError } from "@/components/page-error"
-import { PageLoader } from "@/components/page-loader"
-import { useGetProjects } from "@/components/projects/api/use-get-projects"
-import { ProjectAvatar } from "@/components/projects/components/project-avatar"
-import { useCreateProjectModal } from "@/components/projects/hooks/use-create-project"
-import { useGetTasks } from "@/components/tasks/api/use-get-tasks"
-import { useCreateTaskModal } from "@/components/tasks/hooks/use-create-task"
+import { Analytics } from "@/features/analytics"
+import { useGetMembers } from "@/features/member/api/use-get-members"
+import { MemberAvatar } from "@/features/member/components/member-avatar"
+import { PageError } from "@/features/page-error"
+import { PageLoader } from "@/features/page-loader"
+import { useGetProjects } from "@/features/projects/api/use-get-projects"
+import { ProjectAvatar } from "@/features/projects/components/project-avatar"
+import { useCreateProjectModal } from "@/features/projects/hooks/use-create-project"
+import { useGetTasks } from "@/features/tasks/api/use-get-tasks"
+import { useCreateTaskModal } from "@/features/tasks/hooks/use-create-task"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { SeparatorDotted } from "@/components/ui/separator-dotted"
-import { useGetWorkspaceAnalytics } from "@/components/workspaces/api/use-get-workspace-analytics"
-import { useWorkspaceId } from "@/components/workspaces/hooks/use-workspace-id"
+import { useGetWorkspaceAnalytics } from "@/features/workspaces/api/use-get-workspace-analytics"
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { formatDistanceToNow } from "date-fns"
 import { SettingsIcon } from "lucide-react"
 import { CalendarIcon } from "lucide-react"
@@ -62,15 +62,16 @@ export const TaskList = ({ data, total }) => {
                 </div>
                 <SeparatorDotted className="my-4" />
                 <ul className="flex flex-col gap-y-4">
-                    {data.map((task) => (
+                    {data.slice(0,5).map((task) => (
                         <li key={task.id}>
                             <Link href={`/workspaces/${workspaceId}/tasks/${task.id}`}>
-                                <Card className="shadow-none rounded-lg hover:opacity-75 transition">
-                                    <CardContent className="p-4">
-                                        <p className="text-lg font-medium truncate">{task.name}</p>
+                                <Card className="shadow-none rounded-lg hover:opacity-75 transition h-fit">
+                                    <CardContent className="pt-3 pl-4 pb-3">
+                                        <p className="text-md font-medium truncate">{task.name}</p>
                                         <div className="flex items-center gap-x-2">
-                                            <p>{task.project?.name}</p>
-                                            <div className="size-1 rounded-full bg-neutral-300" />
+                                            <ProjectAvatar className="size-5" image={task.project?.imageUrl} name={task.project?.name} />
+                                            <p className="text-sm">{task.project?.name}</p>
+                                            <div className="size-1 rounded-full bg-emerald-300" />
                                             <div className="text-sm text-muted-foreground flex items-center">
                                                 <CalendarIcon className="size-3 mr-1" />
                                                 <span className="truncate">{formatDistanceToNow(new Date(task.dueDate))}</span>
@@ -112,7 +113,7 @@ export const ProjectList = ({ data, total }) => {
                 <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {data.map((project) => (
                         <li key={project.id}>
-                            <Link href={`/workspaces/${workspaceId}/project/${project.id}`}>
+                            <Link href={`/workspaces/${workspaceId}/projects/${project.id}`}>
                                 <Card className="shadow-none rounded-lg hover:opacity-75 transition">
                                     <CardContent className="p-4 flex items-center gap-x-2.5">
                                         <ProjectAvatar

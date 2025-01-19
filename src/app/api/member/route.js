@@ -11,7 +11,6 @@ export async function GET(request) {
         const supabase = createClient(cookieStore);
         const userId = (await supabase.auth.getUser()).data.user.id
         const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", workspaceId)
-        console.log(member)
         if (!member) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
@@ -39,7 +38,7 @@ export async function PATCH(request) {
         if (member[0].role !== "ADMIN") {
             return NextResponse.json({ message: "You are not admin" }, { status: 401 });
         }
-        if (allMembersInWorkspace.total === 1) {
+        if (allMembersInWorkspace.length === 1) {
             return NextResponse.json({ message: "Cannot change role the last member!" }, { status: 401 });
         }
         await supabase.from("members").update({

@@ -1,4 +1,4 @@
-import { UserButton } from "@/components/dashboard/user-button";
+import { UserButton } from "@/features/dashboard/components/user-button";
 import Image from "next/image";
 import Link from "next/link";
 

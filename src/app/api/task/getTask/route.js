@@ -18,9 +18,8 @@ export async function GET(request) {
         const { data: project } = await supabase.from("projects").select("*").eq("id", task[0].projectsId)
         const { data: member } = await supabase.from("members").select("*").eq("id", task[0].assigneeId)
         const user = await supabaseAdmin.auth.admin.getUserById(member[0].userId)
-
         const assignee = {
-            ...member, name: user.data.user.user_metadata.name, email: user.data.user.email
+            ...member, name: user.data.user.user_metadata.full_name, email: user.data.user.email
         }
         return NextResponse.json({ data: { ...task, project, assignee } }, { status: 200 })
     } catch (error) {

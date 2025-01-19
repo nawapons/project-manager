@@ -2,7 +2,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
-import { QueryProvider } from "@/components/query-provider";
+import { QueryProvider } from "@/features/query-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

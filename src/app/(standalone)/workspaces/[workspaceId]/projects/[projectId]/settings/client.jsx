@@ -1,10 +1,10 @@
 "use client"
 
-import { PageError } from "@/components/page-error"
-import { PageLoader } from "@/components/page-loader"
-import { useGetProject } from "@/components/projects/api/use-get-project"
-import { useProjectId } from "@/components/projects/hooks/use-project-id"
-import { EditProjectForm } from "@/components/projects/project-edit-form"
+import { PageError } from "@/features/page-error"
+import { PageLoader } from "@/features/page-loader"
+import { useGetProject } from "@/features/projects/api/use-get-project"
+import { useProjectId } from "@/features/projects/hooks/use-project-id"
+import { EditProjectForm } from "@/features/projects/components/project-edit-form"
 
 export const ProjectIdSettingsClient = () => {
     const projectId =useProjectId();

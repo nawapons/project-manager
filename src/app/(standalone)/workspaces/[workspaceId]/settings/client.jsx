@@ -1,10 +1,10 @@
 "use client";
 
-import { PageError } from "@/components/page-error";
-import { PageLoader } from "@/components/page-loader";
-import { useGetWorkspace } from "@/components/workspaces/api/use-get-workspace";
-import { useWorkspaceId } from "@/components/workspaces/hooks/use-workspace-id";
-import { EditWorkspaceForm } from "@/components/workspaces/workspace-edit-form";
+import { PageError } from "@/features/page-error";
+import { PageLoader } from "@/features/page-loader";
+import { useGetWorkspace } from "@/features/workspaces/api/use-get-workspace";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { EditWorkspaceForm } from "@/features/workspaces/components/workspace-edit-form";
 
 export const WorkspaceSettingsClient = () => {
     const workspaceId = useWorkspaceId();

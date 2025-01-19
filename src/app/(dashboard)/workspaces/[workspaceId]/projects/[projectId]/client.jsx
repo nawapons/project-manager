@@ -1,12 +1,12 @@
 "use client"
-import { Analytics } from "@/components/analytics";
-import { PageError } from "@/components/page-error";
-import { PageLoader } from "@/components/page-loader";
-import { useGetProject } from "@/components/projects/api/use-get-project";
-import { useGetProjectAnalytics } from "@/components/projects/api/use-get-project-analytics";
-import { ProjectAvatar } from "@/components/projects/components/project-avatar";
-import { useProjectId } from "@/components/projects/hooks/use-project-id";
-import { TaskViewSwitcher } from "@/components/tasks/task-view-switcher";
+import { Analytics } from "@/features/analytics";
+import { PageError } from "@/features/page-error";
+import { PageLoader } from "@/features/page-loader";
+import { useGetProject } from "@/features/projects/api/use-get-project";
+import { useGetProjectAnalytics } from "@/features/projects/api/use-get-project-analytics";
+import { ProjectAvatar } from "@/features/projects/components/project-avatar";
+import { useProjectId } from "@/features/projects/hooks/use-project-id";
+import { TaskViewSwitcher } from "@/features/tasks/components/task-view-switcher";
 import { Button } from "@/components/ui/button";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";

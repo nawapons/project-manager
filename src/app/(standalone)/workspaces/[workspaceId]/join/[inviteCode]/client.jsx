@@ -1,10 +1,10 @@
 "use client";
 
-import { PageError } from "@/components/page-error";
-import { PageLoader } from "@/components/page-loader";
-import { useGetWorkspaceInfo } from "@/components/workspaces/api/use-get-workspace-info";
-import { useWorkspaceId } from "@/components/workspaces/hooks/use-workspace-id";
-import { JoinWorkspaceForm } from "@/components/workspaces/workspace-join-form";
+import { PageError } from "@/features/page-error";
+import { PageLoader } from "@/features/page-loader";
+import { useGetWorkspaceInfo } from "@/features/workspaces/api/use-get-workspace-info";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { JoinWorkspaceForm } from "@/features/workspaces/components/workspace-join-form";
 
 export const WorkspaceJoinClient = () => {
     const workspaceId = useWorkspaceId();

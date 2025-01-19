@@ -90,7 +90,7 @@ export async function GET(request) {
             const user = await supabaseAdmin.auth.admin.getUserById(member.userId)
             // const user = await supabase.auth.admin.getUserById(member.userId)
             return {
-                ...member, name: user.data.user.user_metadata.name, email: user.data.user.email
+                ...member, name: user.data.user.user_metadata.full_name, email: user.data.user.email
             }
         })
     )

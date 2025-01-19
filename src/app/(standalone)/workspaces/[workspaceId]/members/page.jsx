@@ -1,4 +1,4 @@
-import { MembersList } from "@/components/workspaces/components/members-list";
+import { MembersList } from "@/features/workspaces/components/members-list";
 
 const WorkspaceMembersPage = async () => {
     return (

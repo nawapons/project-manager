@@ -1,19 +1,18 @@
 "use client"
 
-import { PageLoader } from "@/components/page-loader"
-import { PageError } from "@/components/page-error"
-import { useGetTask } from "@/components/tasks/api/use-get-task"
-import { TaskBreadcrumbs } from "@/components/tasks/components/task-breadcrumbs"
-import { TaskDescription } from "@/components/tasks/components/task-description"
-import { TaskOverview } from "@/components/tasks/components/task-overview"
-import { useTaskId } from "@/components/tasks/hooks/use-task-id"
+import { PageLoader } from "@/features/page-loader"
+import { PageError } from "@/features/page-error"
+import { useGetTask } from "@/features/tasks/api/use-get-task"
+import { TaskBreadcrumbs } from "@/features/tasks/components/task-breadcrumbs"
+import { TaskDescription } from "@/features/tasks/components/task-description"
+import { TaskOverview } from "@/features/tasks/components/task-overview"
+import { useTaskId } from "@/features/tasks/hooks/use-task-id"
 import { SeparatorDotted } from "@/components/ui/separator-dotted"
 
 
 export const TaskIdClient = () => {
     const taskId = useTaskId()
     const { data, isLoading } = useGetTask({ taskId })
-
     if (isLoading) {
         return <PageLoader />
     }

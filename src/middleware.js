@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/middleware'
-import { useWorkspaceId } from './components/workspaces/hooks/use-workspace-id'
+import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id'
 
 export async function middleware(request) {
     try {

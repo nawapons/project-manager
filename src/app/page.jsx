@@ -1,7 +1,7 @@
 "use client"
 
-import { SignInCard } from "@/components/auth/sign-in-card";
-import { SignUpCard } from "@/components/auth/Sign-up-card";
+import { SignInCard } from "@/features/auth/components/sign-in-card";
+import { SignUpCard } from "@/features/auth/components/Sign-up-card";
 import { useState } from "react";
 
 export default function Home() {
