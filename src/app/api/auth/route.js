@@ -8,6 +8,6 @@ export async function GET() {
     const {
         data: { user },
     } = await supabase.auth.getUser()
-    const data = user.user_metadata
+    const data = { userId: user.id, ...user.user_metadata }
     return NextResponse.json({ data: data }, { status: 200 })
 }

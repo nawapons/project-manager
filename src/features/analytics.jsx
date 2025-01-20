@@ -45,7 +45,6 @@ export const Analytics = ({ data }) => {
                         value={data.incompleteTaskCount}
                         variant={data.incompleteTaskDifferent > 0 ? "up" : "down"}
                         increaseValue={data.incompleteTaskDifferent} />
-                        <SeparatorDotted orientation="vertical"/>
                 </div>
             </div>
             <ScrollBar orientation="horizontal"/>

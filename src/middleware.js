@@ -3,7 +3,7 @@ import { createClient } from '@/utils/supabase/middleware'
 export async function middleware(request) {
     try {
         const { supabase, response } = createClient(request)
-        await supabase.auth.getSession()
+        await supabase.auth.getUser()
         if (request.nextUrl.pathname.includes('workspaces')) {
             const {
                 data: { user },

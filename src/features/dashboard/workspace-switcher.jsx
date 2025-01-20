@@ -10,9 +10,8 @@ export const WorkspaceSwitcher = () => {
     const { open } = useCreateWorkspaceModal();
     const router = useRouter()
     const workspaceId = useWorkspaceId();
-    console.log(workspaceId)
-    const {data: workspaces, isLoading: isLoadingWorkspaces} = useGetWorkspaces()
-    
+    const { data: workspaces, isLoading: isLoadingWorkspaces } = useGetWorkspaces()
+
     const onSelect = (id) => {
         router.push(`/workspaces/${id}`)
     }
@@ -20,29 +19,29 @@ export const WorkspaceSwitcher = () => {
         <div className="flex flex-col gap-y-2">
             <div className="flex items-center justify-between">
                 <p className="text-xs uppercase text-neutral-500">Workspaces</p>
-                <RiAddCircleFill onClick={open} className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition"/>
-            </div>  
+                <RiAddCircleFill onClick={open} className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition" />
+            </div>
             <Select onValueChange={onSelect} value={workspaceId}>
                 <SelectTrigger className="w-full bg-neutral-200 font-medium p-1">
                     <SelectValue placeholder="No workspace selected"/>
                 </SelectTrigger>
                 <SelectContent>
-                    {isLoadingWorkspaces ?(
+                    {isLoadingWorkspaces ? (
                         <SelectItem>Loading workspace</SelectItem>
                     ) : (
-                        workspaces.map((workspace)=>(
+                        workspaces.map((workspace) => (
                             <SelectItem key={workspace.id} value={workspace.id}>
-                               <div className="flex justify-start items-center gap-3 font-medium">
-                                <WorkspaceAvatar name={workspace.name} image={workspace.imageUrl} />
-                                <span className="truncate">{workspace.name}</span>
-                               </div>
+                                <div className="flex justify-start items-center gap-3 font-medium">
+                                    <WorkspaceAvatar name={workspace.name} image={workspace.imageUrl} />
+                                    <span className="truncate">{workspace.name}</span>
+                                </div>
                             </SelectItem>
                         ))
-                    ) 
+                    )
                     }
                 </SelectContent>
             </Select>
         </div>
-       
+
     )
 }

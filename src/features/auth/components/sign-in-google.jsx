@@ -27,7 +27,7 @@ const OneTapComponent = () => {
                 const [nonce, hashedNonce] = await generateNonce()
 
                 // check if there's already an existing session before initializing the one-tap UI
-                const { data, error } = await supabase.auth.getSession()
+                const { data, error } = await supabase.auth.getUser()
                 if (error) {
                     throw new Error("Error getting session")
                 }

@@ -10,37 +10,54 @@ import { TaskViewSwitcher } from "@/features/tasks/components/task-view-switcher
 import { Button } from "@/components/ui/button";
 import { PencilIcon } from "lucide-react";
 import Link from "next/link";
-import {AvatarStack} from "@/components/ui/avatar-stack";
-
+import { useGetMembers } from "@/features/member/api/use-get-members";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
+import { MemberAvatar } from "@/features/member/components/member-avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
 export const ProjectIdClient = () => {
-    const avatars = [
-        { name: "Alice Johnson" },
-        { name: "Bob Smith", }, //TODO : make member avatar
-        { name: "Charlie Brown", },
-        { name: "Diana Prince", },
-    ];
+    const workspaceId = useWorkspaceId();
     const projectId = useProjectId();
+    const { data: members, isLoading: isLoadingMembers } = useGetMembers({ workspaceId })
     const { data: project, isLoading: isLoadingProject } = useGetProject({ projectId })
     const { data: analytics, isLoading: isLoadingAnalytics } = useGetProjectAnalytics({ projectId })
-    const isLoading = isLoadingProject || isLoadingAnalytics;
+    const isLoading = isLoadingProject || isLoadingAnalytics || isLoadingMembers;
     if (isLoading) {
         return <PageLoader />
     }
     if (!project) {
         return <PageError message="Project not found!" />
     }
+    const maxAvatarsAmount = 3
+    const shownAvatars = members.slice(0, maxAvatarsAmount);
+    const hiddenAvatars = members.slice(maxAvatarsAmount);
     return (
         <div className="flex flex-col gap-y-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-x-2">
                     <ProjectAvatar className="size-8" image={project[0].imageUrl} name={project[0].name} />
                     <p className="text-lg font-semibold">{project[0].name}</p>
-                    <AvatarStack
-                        avatars={avatars}
-                        orientation="vertical" // or "vertical"
-                        spacing="sm" // "sm", "md", "lg", or "xl"
-                        maxAvatarsAmount={3} // Number of avatars to show before "+N"
-                    />
+                    <div className="flex flex-row -space-x-5 -space-y-0">
+                        {shownAvatars.map((member) =>
+                        (
+                            <MemberAvatar
+                                className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full flex flex-row -space-x-5 -space-y-5 hover:z-10"
+                                name={member.profiles.fullname} />
+                        ))}
+                        {hiddenAvatars.length ? (
+                            <Avatar className="" key="Excesive avatars">
+                                <AvatarFallback>
+                                    +{members.length - shownAvatars.length}
+                                </AvatarFallback>
+                            </Avatar>
+                        ) : null}
+                    </div>
+
                 </div>
                 <div>
                     <Button variant="secondary" size="sm" asChild>
