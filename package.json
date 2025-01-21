@@ -45,6 +45,7 @@
     "react-router-dom": "^7.1.1",
     "react-use": "^17.5.1",
     "referral-codes": "^3.0.0",
+    "shadcn-comments": "^1.0.5",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",

@@ -14,6 +14,7 @@ import { UserCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useGetCurrent } from "../auth/api/use-get-current";
 import { useLogOut } from "../auth/api/use-logout";
+import { RiLockPasswordFill } from "react-icons/ri";
 
 
 export const UserButton = () => {
@@ -57,6 +58,12 @@ export const UserButton = () => {
                     <Link href="/account">
                         <UserCircle2 className="size-4" />
                         <span>Account</span>
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href="/reset-password">
+                        <RiLockPasswordFill className="size-4" />
+                        <span>Change Password</span>
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />

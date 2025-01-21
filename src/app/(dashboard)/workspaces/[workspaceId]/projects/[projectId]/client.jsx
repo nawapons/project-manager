@@ -46,7 +46,7 @@ export const ProjectIdClient = () => {
                         {shownAvatars.map((member) =>
                         (
                             <MemberAvatar
-                                className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full flex flex-row -space-x-5 -space-y-5 hover:z-10"
+                                className="relative text-sm h-7 w-7 shrink-0 overflow-hidden mr-1.5 rounded-full flex flex-row -space-x-5 -space-y-5 hover:z-10"
                                 name={member.profiles.fullname} />
                         ))}
                         {hiddenAvatars.length ? (

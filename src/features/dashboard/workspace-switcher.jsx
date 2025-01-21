@@ -6,6 +6,7 @@ import { WorkspaceAvatar } from "@/features/workspaces/components/workspace-avat
 import { useGetWorkspaces } from "@/features/workspaces/api/use-get-workspaces"
 import { useRouter } from "next/navigation"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
+import { WorkspaceSkeleton } from "../skeleton/workspace-skeleton"
 export const WorkspaceSwitcher = () => {
     const { open } = useCreateWorkspaceModal();
     const router = useRouter()
@@ -15,6 +16,7 @@ export const WorkspaceSwitcher = () => {
     const onSelect = (id) => {
         router.push(`/workspaces/${id}`)
     }
+    if (isLoadingWorkspaces) return <WorkspaceSkeleton />
     return (
         <div className="flex flex-col gap-y-2">
             <div className="flex items-center justify-between">
@@ -23,21 +25,17 @@ export const WorkspaceSwitcher = () => {
             </div>
             <Select onValueChange={onSelect} value={workspaceId}>
                 <SelectTrigger className="w-full bg-neutral-200 font-medium p-1">
-                    <SelectValue placeholder="No workspace selected"/>
+                    <SelectValue placeholder="No workspace selected" />
                 </SelectTrigger>
                 <SelectContent>
-                    {isLoadingWorkspaces ? (
-                        <SelectItem>Loading workspace</SelectItem>
-                    ) : (
-                        workspaces.map((workspace) => (
-                            <SelectItem key={workspace.id} value={workspace.id}>
-                                <div className="flex justify-start items-center gap-3 font-medium">
-                                    <WorkspaceAvatar name={workspace.name} image={workspace.imageUrl} />
-                                    <span className="truncate">{workspace.name}</span>
-                                </div>
-                            </SelectItem>
-                        ))
-                    )
+                    {workspaces.map((workspace) => (
+                        <SelectItem key={workspace.id} value={workspace.id}>
+                            <div className="flex justify-start items-center gap-3 font-medium">
+                                <WorkspaceAvatar name={workspace.name} image={workspace.imageUrl} />
+                                <span className="truncate">{workspace.name}</span>
+                            </div>
+                        </SelectItem>
+                    ))
                     }
                 </SelectContent>
             </Select>

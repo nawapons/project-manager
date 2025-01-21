@@ -8,6 +8,7 @@ import { passwordSchema, updateSchema } from "@/schema/userSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, useFormState } from "react-hook-form"
 import { useEditAccount } from "../api/use-edit-account"
+import Link from "next/link"
 
 export const AccountEditForm = ({ initialValues }) => {
     const { mutate, isPending } = useEditAccount()
@@ -55,7 +56,7 @@ export const AccountEditForm = ({ initialValues }) => {
             <CardContent>
                 <Form  {...form} >
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2.5">
-                        <div className="mt-2 grid grid-cols-2 gap-4">
+                        <div className="mt-2 grid grid-cols-1 gap-4">
                             <FormField
                                 control={form.control}
                                 name="email"
@@ -86,64 +87,17 @@ export const AccountEditForm = ({ initialValues }) => {
                                 )}
                             />
                         </div>
-                        <div className="flex justify-between items-center p-2">
+                        <div className="flex justify-between items-center pt-4">
+                            <Button variant="outline" asChild>
+                                <Link href="/">
+                                    Cancel
+                                </Link>
+                            </Button>
                             <Button type="submit" disabled={isPending}>Save changes</Button>
                         </div>
                     </form>
                 </Form>
-                <SeparatorDotted className="mt-4" />
-                <div className="text-xl font-bold mt-4">
-                    Change Password
 
-                </div>
-                <Form  {...passwordForm} >
-                    <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-2.5">
-                        <div className="mt-2 grid grid-cols-1 gap-4">
-                            <FormField
-                                control={passwordForm.control}
-                                name="oldPassword"
-                                render={({ fieldPassword }) => (
-                                    <FormItem>
-                                        <FormLabel>Current Password</FormLabel>
-                                        <FormControl>
-                                            <Input {...fieldPassword} type="password" required />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={passwordForm.control}
-                                name="newPassword"
-                                render={({ fieldPassword }) => (
-                                    <FormItem>
-                                        <FormLabel>New Password</FormLabel>
-                                        <FormControl>
-                                            <Input {...fieldPassword} type="password" required />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={passwordForm.control}
-                                name="confirmPassword"
-                                render={({ fieldPassword }) => (
-                                    <FormItem>
-                                        <FormLabel>Confirm Password</FormLabel>
-                                        <FormControl>
-                                            <Input {...fieldPassword} type="password" required />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                        <div className="flex justify-between items-center p-2">
-                            <Button type="submit" disabled={isPending}>Change Password</Button>
-                        </div>
-                    </form>
-                </Form>
             </CardContent>
 
         </Card>
