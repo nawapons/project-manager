@@ -16,6 +16,7 @@ export const TaskIdClient = () => {
     const taskId = useTaskId()
     const { data: user, isLoading: isLoadingUser } = useGetCurrent();
     const { data, isLoading } = useGetTask({ taskId })
+    console.log("task",data)
     if (isLoading || isLoadingUser) {
         return <PageLoader />
     }
@@ -29,7 +30,7 @@ export const TaskIdClient = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <TaskOverview task={data} />
                 <TaskDescription task={data} />
-                <TaskComment user={user} />
+                <TaskComment user={user} taskId={data[0].id} />
             </div>
         </p>
     )

@@ -13,12 +13,18 @@ export async function GET(request) {
         if (!workspaceId) {
             return NextResponse.json({ message: "Missing workspaceId!" }, { status: 401 })
         }
-        const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", workspaceId)
-        if (!member) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+        const { data: members } = await supabase.from("projects-members").select("*").eq("userId", userId)
+        if (!members) {
+            return NextResponse.json({ data: [] }, { status: 200 })
         }
+        const projectIds = members.map((member) => member.projectsId)
+        // const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", workspaceId)
+        // if (!member) {
+        //     return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+        // }
 
-        const { data } = await supabase.from("projects").select("*").eq("workspacesId", workspaceId).order("created_at", { ascending: false })
+        const { data, error } = await supabase.from("projects").select("*").in("id", projectIds).eq("workspacesId", workspaceId).order("created_at", { ascending: false })
+        if (error) return null;
         return NextResponse.json({ data }, { status: 200 })
     } catch (error) {
         return NextResponse.json({ message: "Failed to get project!" }, { status: 500 })
@@ -34,6 +40,7 @@ export async function POST(request) {
         const name = body.get("form[name]")
         const workspacesId = body.get("form[workspaceId]")
         const image = body.get("form[image]")
+        const userId = (await supabase.auth.getUser()).data.user.id
         let imageUrl
         const newImageName = uuidv4()
 
@@ -55,11 +62,18 @@ export async function POST(request) {
             name,
             imageUrl: imageUrl
         }).select()
-        if (insertError) {
+        const { error: insertMemberError } = await supabase.from('projects-members').insert({
+            projectsId: newProject[0].id,
+            userId: userId,
+            role: "ADMIN"
+        })
+        if (insertError || insertMemberError) {
             return NextResponse.json({ message: "add new project failed" }, { status: 401 })
         }
+
         return NextResponse.json({ data: newProject }, { status: 200 })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ message: "Failed to create project!" }, { status: 500 })
     }
 }

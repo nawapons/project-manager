@@ -22,6 +22,8 @@ import { TaskStatus } from "@/schema/taskSchema"
 import { useTaskFilters } from "../hooks/use-task-filters"
 import { UserIcon } from "lucide-react"
 import { FolderIcon } from "lucide-react"
+import { useProjectId } from "@/features/projects/hooks/use-project-id"
+import { useGetProjectMembers } from "@/features/projects/api/use-get-project-member"
 const statusIconMap = {
     [TaskStatus.BACKLOG]: (
         <CircleDashedIcon className="size-[18px] text-pink-400" />
@@ -40,11 +42,12 @@ const statusIconMap = {
     ),
 }
 export const DataFilters = ({ hideProjectFilter }) => {
+    console.log(hideProjectFilter)
     const workspaceId = useWorkspaceId()
+    const defaultProjectId = useProjectId(); //TODO : split getmember && getProejectMembers
 
     const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId })
-    const { data: members, isLoading: isLoadingMembers } = useGetMembers({ workspaceId })
-
+    const { data: members, isLoading: isLoadingMembers } = hideProjectFilter ? useGetProjectMembers({ defaultProjectId }) :  useGetMembers({ workspaceId })  
     const projectOptions = projects?.map((project) => ({
         value: project.id,
         label: project.name
@@ -53,11 +56,11 @@ export const DataFilters = ({ hideProjectFilter }) => {
         value: member.id,
         label: member.profiles.fullname,
     }))
-
+    
     const [{
         status, assigneeId, projectId, dueDate,
     }, setFilters] = useTaskFilters();
-
+    
     const onStatusChange = (value) => {
         setFilters({ status: value === "all" ? null : value })
     }
@@ -67,10 +70,10 @@ export const DataFilters = ({ hideProjectFilter }) => {
     const onProjectChange = (value) => {
         setFilters({ projectId: value === "all" ? null : value })
     }
-
+    
     const isLoading = isLoadingProjects || isLoadingMembers;
     if (isLoading) return null;
-
+    
     return (
         <div className="flex flex-col lg:flex-row gap-2">
             <Select
@@ -112,25 +115,27 @@ export const DataFilters = ({ hideProjectFilter }) => {
                     </SelectItem>
                 </SelectContent>
             </Select>
-            <Select
-                defaultValue={assigneeId ?? undefined}
-                onValueChange={(value) => onAssigneeChange(value)}>
-                <SelectTrigger className="w-full lg:w-auto h-8">
-                    <div className="flex items-center pr-2">
-                        <UserIcon className="size-4 mr-2" />
-                        <SelectValue placeholder="All assignees" />
-                    </div>
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">All assignees</SelectItem>
-                    <SelectSeparator />
-                    {memberOptions?.map((member) => (
-                        <SelectItem key={member.value} value={member.value}>
-                            {member.label}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
+            {hideProjectFilter && (
+                <Select
+                    defaultValue={assigneeId ?? undefined}
+                    onValueChange={(value) => onAssigneeChange(value)}>
+                    <SelectTrigger className="w-full lg:w-auto h-8">
+                        <div className="flex items-center pr-2">
+                            <UserIcon className="size-4 mr-2" />
+                            <SelectValue placeholder="All assignees" />
+                        </div>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">All assignees</SelectItem>
+                        <SelectSeparator />
+                        {memberOptions?.map((member) => (
+                            <SelectItem key={member.value} value={member.value}>
+                                {member.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            )}
             {!hideProjectFilter && (
                 <Select
                     defaultValue={projectId ?? undefined}

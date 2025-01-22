@@ -26,3 +26,7 @@ export const bulkTaskUpdateSchema = z.object({
     })
   )
 })
+export const commentTaskSchema = z.object({
+  taskId: z.string().trim().min(1, "Required"),
+  message: z.string().trim().min(1, "Required")
+})

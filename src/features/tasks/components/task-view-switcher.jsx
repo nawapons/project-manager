@@ -30,7 +30,6 @@ export const TaskViewSwitcher = ({ hideProjectFilter }) => {
     const { open, } = useCreateTaskModal();
     const { mutate: bulkUpdate } = useBulkEditTasks()
     const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({ workspaceId, projectId: paramsProjectId || projectId, status, assigneeId, dueDate })
-    console.log("GET TASKS",tasks)
     const onKanbanChange = useCallback((tasks) => {
         bulkUpdate({
             json: { tasks }

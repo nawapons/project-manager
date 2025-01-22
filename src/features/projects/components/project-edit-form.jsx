@@ -24,6 +24,7 @@ import { useConfirm } from "@/hooks/use-confirm"
 import { updateProjectSchema } from "@/schema/projectSchema"
 import { useEditProject } from "../api/use-edit-project"
 import { useDeleteProject } from "../api/use-delete-project"
+import { ProjectMemberList } from "./project-member-list"
 export const EditProjectForm = ({ onCancel, initialValues }) => {
     const router = useRouter();
     const { mutate, isPending } = useEditProject()
@@ -47,7 +48,7 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
         if (!ok) return;
         deleteProject({
             param: { projectId: initialValues[0].id }
-        },{
+        }, {
             onSuccess: () => {
                 router.push(`/workspaces/${initialValues[0].workspacesId}`)
             }
@@ -180,6 +181,7 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
                     </Form>
                 </CardContent>
             </Card>
+            <ProjectMemberList />
             <Card className="w-full h-full border-none shadow-none">
                 <CardContent className="p-7">
                     <div className="flex flex-col">
@@ -198,6 +200,7 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
                     </div>
                 </CardContent>
             </Card>
+
         </div>
     )
 }
