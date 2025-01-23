@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { snakeCaseToTitleCase } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { useEditTaskModal } from "../hooks/use-edit-task"
+import { format } from "date-fns"
 
 export const TaskOverview = ({ task }) => {
     const { open } = useEditTaskModal()
@@ -25,6 +26,9 @@ export const TaskOverview = ({ task }) => {
                     <OverviewProperty label="Assignee">
                         <MemberAvatar name={task.assignee.name} className="size-6" />
                         <p className="text-sm font-medium">{task.assignee.name}</p>
+                    </OverviewProperty>
+                    <OverviewProperty label="Start Date">
+                        <span className="truncate text-sm font-medium">{format(task[0].startDate, "PPP")}</span>
                     </OverviewProperty>
                     <OverviewProperty label="Due Date">
                         <TaskDate value={task[0].dueDate} className="text-sm font-medium" />

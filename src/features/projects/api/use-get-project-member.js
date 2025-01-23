@@ -15,7 +15,6 @@ export const useGetProjectMembers = ({
             if (response.status !== 200) {
                 throw new Error("Failed to fetch project members")
             }
-            console.log("response=>",response.data.data)
             return await response.data.data;
         }
     });

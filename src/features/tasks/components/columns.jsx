@@ -1,13 +1,14 @@
 "use client"
 import { ArrowUpDown } from "lucide-react"
 import { Button } from "@/components/ui/button";
-import {Badge} from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge"
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { MemberAvatar } from "@/features/member/components/member-avatar";
 import { TaskDate } from "./task-date";
 import { snakeCaseToTitleCase } from "@/lib/utils";
 import { TaskActions } from "./task-actions";
 import { MoreVertical } from "lucide-react";
+import { format } from "date-fns";
 export const columns = [
     {
         accessorKey: "name",
@@ -74,6 +75,28 @@ export const columns = [
         }
     },
     {
+        accessorKey: "startDate",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Start Date
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        },
+        cell: ({ row }) => {
+            const startDate = row.original.startDate;
+            return (
+                <span className="truncate">
+                    {format(startDate, "PPP")}
+                </span>
+            )
+        }
+    },
+    {
         accessorKey: "dueDate",
         header: ({ column }) => {
             return (
@@ -116,14 +139,14 @@ export const columns = [
     },
     {
         id: "actions",
-        cell: ({row}) => {
+        cell: ({ row }) => {
             const id = row.original.id;
             const projectId = row.original.projectsId
-            
+
             return (
                 <TaskActions id={id} projectId={projectId}>
                     <Button variant="ghost" className="size-8 p-0">
-                        <MoreVertical className="size-4"/>
+                        <MoreVertical className="size-4" />
                     </Button>
                 </TaskActions>
             )

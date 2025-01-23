@@ -17,16 +17,18 @@ import { DataKanban } from "./data-kanban"
 import { useBulkEditTasks } from "../api/use-bulk-edit-tasks"
 import { DataCalendar } from "./data-calendar"
 import { useProjectId } from "../../projects/hooks/use-project-id"
+import { useGetCurrent } from "@/features/auth/api/use-get-current"
+import { PageLoader } from "@/features/page-loader"
 
-export const TaskViewSwitcher = ({ hideProjectFilter }) => {
+export const TaskViewSwitcher = ({ hideProjectFilter, memberData }) => {
     const [view, setView] = useQueryState("task-view", {
         defaultValue: "table",
     })
+    const workspaceId = useWorkspaceId()
+    const paramsProjectId = useProjectId();
     const [{
         status, assigneeId, projectId, dueDate,
     }] = useTaskFilters();
-    const workspaceId = useWorkspaceId()
-    const paramsProjectId = useProjectId();
     const { open, } = useCreateTaskModal();
     const { mutate: bulkUpdate } = useBulkEditTasks()
     const { data: tasks, isLoading: isLoadingTasks } = useGetTasks({ workspaceId, projectId: paramsProjectId || projectId, status, assigneeId, dueDate })
@@ -63,7 +65,7 @@ export const TaskViewSwitcher = ({ hideProjectFilter }) => {
                     </Button>
                 </div>
                 <SeparatorDotted className="my-4" />
-                <DataFilters hideProjectFilter={hideProjectFilter} />
+                <DataFilters hideProjectFilter={hideProjectFilter} memberData={memberData} />
                 <SeparatorDotted className="my-4" />
                 {isLoadingTasks ? (
                     <div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">

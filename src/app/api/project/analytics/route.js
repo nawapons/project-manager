@@ -13,7 +13,7 @@ export async function GET(request) {
 
     const { data: project } = await supabase.from("projects").select("*").eq("id", projectId)
 
-    const { data: member } = await supabase.from("members").select("*").eq("workspacesId", project[0].workspacesId).eq("userId", userId)
+    const { data: member } = await supabase.from("projects-members").select("*").eq("projectsId", project[0].id).eq("userId", userId)
     if (!member) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
 
     const now = new Date();

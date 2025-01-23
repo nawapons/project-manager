@@ -4,13 +4,15 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(request) {
     const body = await request.json();
-    const { userId, fullname } = body
+    const { fullname } = body
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
+    const userId = (await supabase.auth.getUser()).data.user.id
     if (!userId) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     await supabase.auth.updateUser({
         data: { full_name: fullname },
     })
+    console.log(userId, fullname)
     await supabase.from("profiles").update({
         fullname: fullname
     }).eq("id", userId)

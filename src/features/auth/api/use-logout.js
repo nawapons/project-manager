@@ -16,6 +16,8 @@ export const useLogOut = () => {
             router.push("/")
             queryClient.invalidateQueries({queryKey: ["current"]})
             queryClient.invalidateQueries({queryKey: ["workspaces"]})
+            queryClient.invalidateQueries({queryKey: ["projects"]})
+            queryClient.invalidateQueries({queryKey: ["tasks"]})
         }
     });
 }

@@ -18,9 +18,12 @@ export const useEditTask = () => {
             return await response.data.data
         },
         onSuccess: (data) => {
+            console.log(data)
             toast.success("Task updated")
             queryClient.invalidateQueries({queryKey: ["tasks"]})
-            queryClient.invalidateQueries({queryKey: ["task", data[0].id]})
+            queryClient.invalidateQueries({queryKey: ["task", data[0].id]})            
+            queryClient.invalidateQueries({queryKey: ["workspace-analytics"]})
+            queryClient.invalidateQueries({queryKey: ["project-analytics"]})
         },
         onError: (error) => {
             toast.error(error.response.data.message)

@@ -16,7 +16,6 @@ export const TaskIdClient = () => {
     const taskId = useTaskId()
     const { data: user, isLoading: isLoadingUser } = useGetCurrent();
     const { data, isLoading } = useGetTask({ taskId })
-    console.log("task",data)
     if (isLoading || isLoadingUser) {
         return <PageLoader />
     }

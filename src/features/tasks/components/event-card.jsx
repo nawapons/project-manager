@@ -1,25 +1,26 @@
-import {MemberAvatar} from "@/features/member/components/member-avatar"
-import {ProjectAvatar} from "@/features/projects/components/project-avatar"
-import {useWorkspaceId} from "@/features/workspaces/hooks/use-workspace-id"
-import {cn} from "@/lib/utils"
-import {TaskStatus} from "@/schema/taskSchema"
-import {useRouter} from "next/navigation"
+import { MemberAvatar } from "@/features/member/components/member-avatar"
+import { MemberAvatarStack } from "@/features/member/components/member-avatar-stack"
+import { ProjectAvatar } from "@/features/projects/components/project-avatar"
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
+import { cn } from "@/lib/utils"
+import { TaskStatus } from "@/schema/taskSchema"
+import { useRouter } from "next/navigation"
 
 
 const statusColorMap = { //receive status value
-    [TaskStatus.BACKLOG]: "border-l-pink-500",
-    [TaskStatus.TODO]: "border-l-red-500",
-    [TaskStatus.IN_PROGRESS]: "border-l-yellow-500",
-    [TaskStatus.IN_REVIEW]: "border-l-blue-500",
-    [TaskStatus.DONE]: "border-l-emerald-500"
+    [TaskStatus.BACKLOG]: "border-pink-500 bg-amber-50",
+    [TaskStatus.TODO]: "border-red-500 bg-amber-50",
+    [TaskStatus.IN_PROGRESS]: "border-yellow-500 bg-amber-50",
+    [TaskStatus.IN_REVIEW]: "border-blue-500 bg-amber-50",
+    [TaskStatus.DONE]: "border-emerald-500 bg-amber-50"
 }
 export const EventCard = ({
-                              title,
-                              assignee,
-                              project,
-                              status,
-                              id,
-                          }) => {
+    title,
+    assignee,
+    project,
+    status,
+    id,
+}) => {
     const workspaceId = useWorkspaceId()
     const router = useRouter()
 
@@ -34,12 +35,16 @@ export const EventCard = ({
                 "p-1.5 text-xs bg-white text-primary border rounded-md border-l-4 flex flex-col gap-y-1.5 cursor-pointer hover:opacity-75 transition"
                 , statusColorMap[status]
             )}>
-                <p>{title}</p>
-                <div className="flex items-center gap-x-1">
+                <div className="flex items-center gap-x-2">
+                    <MemberAvatarStack name={assignee?.name} />
+                    <div className="size-1 rounded-full bg-neutral-300"/>
+                    <p>{title}</p>
+                </div>
+                {/* <div className="flex items-center gap-x-1">
                     <MemberAvatar name={assignee?.name}/>
                     <div className="size-1 rounded-full bg-neutral-300"/>
                     <ProjectAvatar name={project?.name} image={project?.imageUrl}/>
-                </div>
+                </div> */}
             </div>
         </div>
     )

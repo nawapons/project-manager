@@ -6,6 +6,7 @@ export async function GET(request) {
     try {
         const url = new URL(request.url)
         const projectId = url.searchParams.get("projectId")
+        console.log(url)
         const cookieStore = cookies()
         const supabase = createClient(cookieStore)
         const userId = (await supabase.auth.getUser()).data.user.id
@@ -14,8 +15,6 @@ export async function GET(request) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
         const { data: members } = await supabase.from("projects-members").select(`*,profiles(fullname,email)`).eq("projectsId", projectId)
-        console.log(projectId,"BACKEND")
-        console.log(members,"BACKEND")
         return NextResponse.json({ data: members }, { status: 200 })
     } catch (error) {
         return NextResponse.json({ message: "Failed to get member!" }, { status: 500 })

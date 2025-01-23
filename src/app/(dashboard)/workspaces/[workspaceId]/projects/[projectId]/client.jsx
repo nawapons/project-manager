@@ -100,7 +100,7 @@ export const ProjectIdClient = () => {
             {analytics ? (
                 <Analytics data={analytics} />
             ) : null}
-            <TaskViewSwitcher hideProjectFilter />
+            <TaskViewSwitcher hideProjectFilter memberData={members} />
         </div>
     )
 }

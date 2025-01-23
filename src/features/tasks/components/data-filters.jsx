@@ -41,18 +41,17 @@ const statusIconMap = {
         <CircleCheckIcon className="size-[18px] text-emerald-400" />
     ),
 }
-export const DataFilters = ({ hideProjectFilter }) => {
-    console.log(hideProjectFilter)
+export const DataFilters = ({ hideProjectFilter,memberData }) => {
+    console.log(memberData)
     const workspaceId = useWorkspaceId()
-    const defaultProjectId = useProjectId(); //TODO : split getmember && getProejectMembers
-
+    const getProjectId = useProjectId();
     const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId })
-    const { data: members, isLoading: isLoadingMembers } = hideProjectFilter ? useGetProjectMembers({ defaultProjectId }) :  useGetMembers({ workspaceId })  
+    // const { data: members, isLoading: isLoadingMembers } =  useGetMembers({ workspaceId }) 
     const projectOptions = projects?.map((project) => ({
         value: project.id,
         label: project.name
     }))
-    const memberOptions = members?.map((member) => ({
+    const memberOptions = memberData?.map((member) => ({
         value: member.id,
         label: member.profiles.fullname,
     }))
@@ -71,9 +70,9 @@ export const DataFilters = ({ hideProjectFilter }) => {
         setFilters({ projectId: value === "all" ? null : value })
     }
     
-    const isLoading = isLoadingProjects || isLoadingMembers;
+    const isLoading = isLoadingProjects
     if (isLoading) return null;
-    
+ 
     return (
         <div className="flex flex-col lg:flex-row gap-2">
             <Select
