@@ -42,9 +42,7 @@ const statusIconMap = {
     ),
 }
 export const DataFilters = ({ hideProjectFilter,memberData }) => {
-    console.log(memberData)
     const workspaceId = useWorkspaceId()
-    const getProjectId = useProjectId();
     const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId })
     // const { data: members, isLoading: isLoadingMembers } =  useGetMembers({ workspaceId }) 
     const projectOptions = projects?.map((project) => ({

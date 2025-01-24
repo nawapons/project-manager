@@ -22,8 +22,6 @@ export const JoinWorkspaceForm = ({ initialsValues }) => {
     const workspaceId = useWorkspaceId()
     const { mutate, isPending } = useJoinWorkspace()
     const { data: members, isLoading: isLoadingMembers } = useGetMembers({ workspaceId })
-    console.log("display initialsValue", initialsValues)
-    console.log("display member", members)
     if(isLoadingMembers) {
         return <PageLoader/>
     }

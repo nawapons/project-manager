@@ -22,7 +22,6 @@ export async function GET(request) {
         }
         return NextResponse.json({ data: { ...task, project, assignee } }, { status: 200 })
     } catch (error) {
-        console.log(error)
         return NextResponse.json({ message: error.message }, { status: 500 })
     }
 }

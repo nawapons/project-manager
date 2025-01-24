@@ -18,7 +18,6 @@ export const useEditTask = () => {
             return await response.data.data
         },
         onSuccess: (data) => {
-            console.log(data)
             toast.success("Task updated")
             queryClient.invalidateQueries({queryKey: ["tasks"]})
             queryClient.invalidateQueries({queryKey: ["task", data[0].id]})            

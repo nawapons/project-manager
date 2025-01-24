@@ -13,11 +13,6 @@ export async function DELETE(request) {
     if (!member || member[0].role !== "ADMIN") {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
-    // const {data: workspace} = await supabase.from("workspaces").select("*").eq("id",workspaceId)
-    // console.log("WORKSPACE=>",workspace)
-    // if(workspace[0].imageUrl !== null || workspace[0].imageUrl !== ""){
-    //     await supabase.storage.from("workspaces").remove([workspace[0].imageUrl])
-    // }
     const { error } = await supabase.from("workspaces").delete().eq("id", workspaceId)
     if (error) return NextResponse.json({ message: error.message }, { status: 401 })
     return NextResponse.json({ data: { id: workspaceId } }, { status: 200 })

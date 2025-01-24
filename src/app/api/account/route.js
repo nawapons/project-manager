@@ -12,7 +12,6 @@ export async function PATCH(request) {
     await supabase.auth.updateUser({
         data: { full_name: fullname },
     })
-    console.log(userId, fullname)
     await supabase.from("profiles").update({
         fullname: fullname
     }).eq("id", userId)

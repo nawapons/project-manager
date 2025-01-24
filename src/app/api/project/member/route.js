@@ -6,7 +6,6 @@ export async function GET(request) {
     try {
         const url = new URL(request.url)
         const projectId = url.searchParams.get("projectId")
-        console.log(url)
         const cookieStore = cookies()
         const supabase = createClient(cookieStore)
         const userId = (await supabase.auth.getUser()).data.user.id

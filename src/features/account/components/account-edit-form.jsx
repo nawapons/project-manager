@@ -4,15 +4,14 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { SeparatorDotted } from "@/components/ui/separator-dotted"
-import { passwordSchema, updateSchema } from "@/schema/userSchema"
+import { updateSchema } from "@/schema/userSchema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useFormState } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { useEditAccount } from "../api/use-edit-account"
 import Link from "next/link"
 
 export const AccountEditForm = ({ initialValues }) => {
     const { mutate, isPending } = useEditAccount()
-    console.log(initialValues)
     const form = useForm({
         resolver: zodResolver(updateSchema),
         defaultValues: {
@@ -20,31 +19,13 @@ export const AccountEditForm = ({ initialValues }) => {
             email: initialValues.email,
         }
     })
-    const passwordForm = useForm({
-        resolver: zodResolver(passwordSchema),
-        defaultValues: {
-            oldPassword: "",
-            newPassword: "",
-            confirmPassword: "",
-        }
-    })
     const onSubmit = async (values) => {
         const fullname = values.fullname
-        console.log("VALUE", initialValues.userId, fullname)
         mutate({ userId: initialValues.userId, fullname })
-    }
-    const onPasswordSubmit = async (values) => {
-        console.log(values)
     }
     return (
         <Card className="w-full h-full border-none shadow-none">
             <CardHeader className="flex flex-row items-center gap-x-4 p-7 space-y-0">
-                {/* <Button variant="secondary" size="sm" asChild>
-                    <Link href={"/"}>
-                        <ArrowLeftIcon className="size-4 mr-2" />
-                        Back
-                    </Link>
-                </Button> */}
                 <CardTitle className="text-xl font-bold">
                     My profile
                     <p className="mt-2 text-sm text-muted-foreground">Change your profile data in here</p>

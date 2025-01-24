@@ -46,13 +46,10 @@ export async function DELETE(request) {
         if (!commentId) return NextResponse.json({ message: "Invalid comemnt Data" }, { status: 401 })
         const userId = (await supabase.auth.getUser()).data.user.id
         if (!userId) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
-        console.log(commentId,userId)
         const { error } = await supabase.from("comments").delete().eq("id", commentId).eq("userId", userId)
         if (error) return NextResponse.json({ error: error }, { status: 401 })
-        console.log(error)
         return NextResponse.json({  success: true }, { status: 200 })
     } catch (error) {
-        console.log(error)
         return NextResponse.json({ message: error.message }, { status: 500 })
     }
 }
