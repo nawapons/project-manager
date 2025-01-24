@@ -35,6 +35,10 @@ export const config = {
     matcher: [
         '/',
         '/workspaces',
-        '/workspaces/:path*'
+        '/workspaces/:path*',
+        '/account',
+        '/reset-password',
+        '/api',
+        '/api/*',
     ],
 }
