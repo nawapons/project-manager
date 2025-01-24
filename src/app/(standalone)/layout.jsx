@@ -1,7 +1,4 @@
-import { UserButton } from "@/components/dashboard/user-button";
-import Image from "next/image";
-import Link from "next/link";
-
+import { UserButton } from "@/features/dashboard/user-button";
 const StandloneLayout = ({ children }) => {
     return (
         <main className="bg-neutral-50 min-h-screen">

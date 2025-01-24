@@ -1,4 +1,4 @@
-import { CreateWorkspaceForm } from '@/components/workspaces/workspace-add-form'
+import { CreateWorkspaceForm } from '@/features/workspaces/components/workspace-add-form'
 import React from 'react'
 
 export default function WorkspaceCreatePage() {

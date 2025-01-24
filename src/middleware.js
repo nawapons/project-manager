@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/utils/supabase/middleware'
-import { useWorkspaceId } from './components/workspaces/hooks/use-workspace-id'
-
 export async function middleware(request) {
     try {
         const { supabase, response } = createClient(request)
-        await supabase.auth.getSession()
+        await supabase.auth.getUser()
         if (request.nextUrl.pathname.includes('workspaces')) {
             const {
                 data: { user },

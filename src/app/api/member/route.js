@@ -1,6 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 export async function GET(request) {
@@ -11,7 +10,6 @@ export async function GET(request) {
         const supabase = createClient(cookieStore);
         const userId = (await supabase.auth.getUser()).data.user.id
         const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", workspaceId)
-        console.log(member)
         if (!member) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
@@ -39,7 +37,7 @@ export async function PATCH(request) {
         if (member[0].role !== "ADMIN") {
             return NextResponse.json({ message: "You are not admin" }, { status: 401 });
         }
-        if (allMembersInWorkspace.total === 1) {
+        if (allMembersInWorkspace.length === 1) {
             return NextResponse.json({ message: "Cannot change role the last member!" }, { status: 401 });
         }
         await supabase.from("members").update({
@@ -60,11 +58,14 @@ export async function DELETE(request) {
         const memberId = url.searchParams.get("memberId")
 
         const { data: memberToDelete } = await supabase.from("members").select("*").eq("id", memberId)
-        const { data: allMembersInWorkspace } = await supabase.from("members").select("*").eq("workspacesId", memberToDelete[0].workspacesId)
+        // const { data: allMembersInWorkspace } = await supabase.from("members").select("*").eq("workspacesId", memberToDelete[0].workspacesId)
 
         const { data: member } = await supabase.from("members").select("*").eq("workspacesId", memberToDelete[0].workspacesId).eq("userId", userId)
         if (!member) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+        if(memberToDelete[0].userId === userId) {
+            return NextResponse.json({ message: "Cannot delete yourself!" }, { status: 401 });
         }
         if (member[0].id !== memberToDelete[0].id && member[0].role !== "ADMIN") {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });

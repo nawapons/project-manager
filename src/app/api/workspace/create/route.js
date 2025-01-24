@@ -18,7 +18,6 @@ export async function POST(request) {
     if (image instanceof File) {
         const { error } = await supabase.storage.from('workspaces').upload(newImageName, image)
         if (error) {
-            console.log('error, upload file failed', error)
             return NextResponse.json({ error: "upload file failed" }, { status: 401 })
         }
         const { data } = supabase.storage.from('workspaces').getPublicUrl(newImageName)
@@ -44,6 +43,5 @@ export async function POST(request) {
     if (insertError) {
         return NextResponse.json({ error: "add new workspace failed" }, { status: 500 })
     }
-    console.log(newWorkspace)
     return NextResponse.json({ data: newWorkspace }, { status: 200 })
 }

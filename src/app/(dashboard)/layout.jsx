@@ -1,10 +1,10 @@
-import { SidebarComponents } from '@/components/dashboard/sidebar';
+import { SidebarComponents } from '@/features/dashboard/sidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import React from 'react'
-import { Navbar } from '@/components/dashboard/navbar';
-import { WorkspaceAddModal } from '@/components/workspaces/workspace-add-modal';
-import { CreateTaskModal } from '@/components/tasks/task-add-modal';
-import { EditTaskModal } from '@/components/tasks/task-edit-modal';
+import { Navbar } from '@/features/dashboard/navbar';
+import { WorkspaceAddModal } from '@/features/workspaces/components/workspace-add-modal';
+import { CreateTaskModal } from '@/features/tasks/components/task-add-modal';
+import { EditTaskModal } from '@/features/tasks/components/task-edit-modal';
 
 const DashboardLayout = ({ children }) => {
     return (

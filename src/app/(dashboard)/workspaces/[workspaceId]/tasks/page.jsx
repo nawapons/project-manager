@@ -1,6 +1,6 @@
-import { TaskViewSwitcher } from "@/components/tasks/task-view-switcher"
+import { TaskViewSwitcher } from "@/features/tasks/components/task-view-switcher"
 
-const TaskPage = async () => {
+const TaskPage =  () => {
     return (
         <div className="h-full flex flex-col">
             <TaskViewSwitcher />
