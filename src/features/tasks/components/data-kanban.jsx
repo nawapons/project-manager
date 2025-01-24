@@ -7,6 +7,7 @@ import {
 import { TaskStatus } from "@/schema/taskSchema"
 import { KanbanColumnHeader } from "./kanban-column-header"
 import { KanbanCard } from "./kanban-card"
+import { ScrollArea } from "@/components/ui/scroll-area"
 const boards = [
     TaskStatus.BACKLOG,
     TaskStatus.TODO,
@@ -124,30 +125,31 @@ export const DataKanban = ({ data, onChange }) => {
                             <KanbanColumnHeader
                                 board={board}
                                 taskCount={tasks[board].length} />
-
-                            <Droppable droppableId={board}>
-                                {(provided) => (
-                                    <div {...provided.droppableProps}
-                                        ref={provided.innerRef}
-                                        className="min-h-[200px] py-1.5">
-                                        {tasks[board].map((task, index) => (
-                                            <Draggable key={task.id}
-                                                draggableId={task.id}
-                                                index={index}>
-                                                {(provided) => (
-                                                    <div ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                    >
-                                                        <KanbanCard task={task} />
-                                                    </div>
-                                                )}
-                                            </Draggable>
-                                        ))}
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
+                            <ScrollArea className="h-72 w-full rounded-md border-none">
+                                <Droppable droppableId={board}>
+                                    {(provided) => (
+                                        <div {...provided.droppableProps}
+                                            ref={provided.innerRef}
+                                            className="min-h-[200px] py-1.5">
+                                            {tasks[board].map((task, index) => (
+                                                <Draggable key={task.id}
+                                                    draggableId={task.id}
+                                                    index={index}>
+                                                    {(provided) => (
+                                                        <div ref={provided.innerRef}
+                                                            {...provided.draggableProps}
+                                                            {...provided.dragHandleProps}
+                                                        >
+                                                            <KanbanCard task={task} />
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            ))}
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                            </ScrollArea>
                         </div>
                     )
                 })}
