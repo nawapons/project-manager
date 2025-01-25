@@ -39,6 +39,6 @@ export const config = {
         '/account',
         '/reset-password',
         '/api',
-        '/api/*',
+        '/api/:path*',
     ],
 }
