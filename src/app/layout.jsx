@@ -1,13 +1,12 @@
 import localFont from "next/font/local";
-import {Anuphan} from "next/font/google"
+import { Anuphan } from "next/font/google"
 import "./globals.css";
 import { Toaster } from "sonner";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { QueryProvider } from "@/features/query-provider";
-
 const anuphan = Anuphan({
   weight: '500',
-  subsets: ['thai','latin']
+  subsets: ['thai', 'latin']
 })
 
 export const metadata = {
@@ -24,7 +23,7 @@ export default function RootLayout({ children }) {
         <QueryProvider>
           <NuqsAdapter>
             <Toaster position="top-center" richColors />
-            {children}
+              {children}
           </NuqsAdapter>
         </QueryProvider>
       </body>

@@ -15,9 +15,13 @@ import {
 } from "@/components/ui/form"
 import { createClient } from "@/utils/supabase/client"
 import { useLogin } from "../api/use-login"
+import { useRouter } from 'next/navigation'
+import { useGoogleSignin } from '../api/use-google.login'
 export const SignInCard = ({ setState }) => {
+    const router = useRouter();
     const supabase = createClient()
     const {mutate,isPending} = useLogin()
+    const {mutate: googleSignin, isPending: isPendingGoogleSignin} = useGoogleSignin()
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -29,13 +33,16 @@ export const SignInCard = ({ setState }) => {
         mutate({values})
     }
     const onGoogleSignIn = async () => {
-        await supabase.auth.signInWithOAuth({
-            provider: 'google',
-            options: {
-                redirectTo: 'https://zvomobixtewrgsmyijry.supabase.co/auth/v1/callback'
-            }
-        })
+        googleSignin()
     }
+    // const onGoogleSignIn = async () => {
+    //     await supabase.auth.signInWithOAuth({
+    //         provider: 'google',
+    //         options: {
+    //             redirectTo: 'https://zvomobixtewrgsmyijry.supabase.co/auth/v1/callback'
+    //         }
+    //     }).then(router.refresh())
+    // }
     return (
         <Card className="w-full h-auto md:w-[420px]">
             <CardHeader>
@@ -76,7 +83,8 @@ export const SignInCard = ({ setState }) => {
                 </Form>
                 <Separator />
                 <div className="flex flex-col gap-y-2.5">
-                    <Button disabled={isPending} variant="outline" size="lg" className="w-full relative" onClick={onGoogleSignIn}>
+                    
+                    <Button disabled={isPending || isPendingGoogleSignin} variant="outline" size="lg" className="w-full relative" onClick={onGoogleSignIn}>
                         <FcGoogle />
                         Sign in with Google</Button>
                 </div>

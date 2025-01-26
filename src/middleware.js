@@ -38,7 +38,5 @@ export const config = {
         '/workspaces/:path*',
         '/account',
         '/reset-password',
-        '/api',
-        '/api/:path*',
     ],
 }
