@@ -23,10 +23,16 @@ export const EditTaskFormWrapper = ({
     });
 
     const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId });
-    
-    const { data: members, isLoading: isLoadingMembers } = selectedProjectId
-        ? useGetProjectMembers({ projectId: selectedProjectId })
-        : useGetMembers({ workspaceId });
+    const { data: projectMembers, isLoading: isLoadingProjectMembers } = useGetProjectMembers({ 
+        projectId: selectedProjectId ?? '' 
+    });
+    const { data: workspaceMembers, isLoading: isLoadingWorkspaceMembers } = useGetMembers({ 
+        workspaceId 
+    });
+
+    // Process the data after the hooks are called
+    const members = selectedProjectId ? projectMembers : workspaceMembers;
+    const isLoadingMembers = selectedProjectId ? isLoadingProjectMembers : isLoadingWorkspaceMembers;
 
     // Set initial project ID when task data is loaded
     useEffect(() => {
