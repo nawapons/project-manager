@@ -1,7 +1,7 @@
 "use client"
 
-import { SignInCard } from "@/features/auth/components/sign-in-card";
-import { SignUpCard } from "@/features/auth/components/Sign-up-card";
+import { LoginForm } from "@/features/auth/components/sign-in-form";
+import { RegisterForm } from "@/features/auth/components/sign-up-form";
 import { useState } from "react";
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div className="h-full flex items-center justify-center">
       <div className="md:h-auto md:w-[420px]">
-        {state === "signIn" ? <SignInCard setState={setState} /> : <SignUpCard setState={setState} />}
+        {state === "signIn" ? <LoginForm setState={setState} /> : <RegisterForm setState={setState} />}
       </div>
     </div>
   );

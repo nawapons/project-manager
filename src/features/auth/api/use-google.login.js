@@ -9,12 +9,12 @@ export const useGoogleSignin = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const { data,error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `https://zvomobixtewrgsmyijry.supabase.co/auth/v1/callback`
         }
-      });
+      })
 
       if (error) throw error;
     },
@@ -23,7 +23,7 @@ export const useGoogleSignin = () => {
     },
     onSuccess: () => {
       // Optional: Add any post-sign-in logic
-      router.push('/workspaces'); // Redirect to desired page
+      router.refresh() // Redirect to desired page
     }
   });
 };
