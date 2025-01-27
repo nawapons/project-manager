@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { QueryProvider } from "@/features/query-provider";
+import { Suspense } from "react";
 const anuphan = Anuphan({
   weight: '500',
   subsets: ['thai', 'latin']
@@ -23,7 +24,9 @@ export default function RootLayout({ children }) {
         <QueryProvider>
           <NuqsAdapter>
             <Toaster position="top-center" richColors />
+            <Suspense>
               {children}
+            </Suspense>
           </NuqsAdapter>
         </QueryProvider>
       </body>

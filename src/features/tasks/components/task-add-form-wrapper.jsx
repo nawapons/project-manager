@@ -17,9 +17,16 @@ export const CreateTaskFormWrapper = ({
     const [selectedProjectId, setSelectedProjectId] = useState(useProjectId());
     const { data: user, isLoading: isLoadingUser } = useGetCurrent();
     const { data: projects, isLoading: isLoadingProjects } = useGetProjects({ workspaceId })
-    const { data: members, isLoading: isLoadingMembers } = selectedProjectId
-        ? useGetProjectMembers({ projectId: selectedProjectId })
-        : useGetMembers({ workspaceId });
+    const { data: projectMembers, isLoading: isLoadingProjectMembers } = useGetProjectMembers({ 
+        projectId: selectedProjectId ?? '' 
+    });
+    const { data: workspaceMembers, isLoading: isLoadingWorkspaceMembers } = useGetMembers({ 
+        workspaceId 
+    });
+
+    // Process the data after the hooks are called
+    const members = selectedProjectId ? projectMembers : workspaceMembers;
+    const isLoadingMembers = selectedProjectId ? isLoadingProjectMembers : isLoadingWorkspaceMembers;
     const projectOptions = projects?.map((project) => ({
         id: project.id,
         name: project.name,
