@@ -19,7 +19,7 @@ export async function GET(request) {
         }
 
         // Get the correct origin
-        const protocol = process.env.VERCEL_URL ? 'https' : 'http'
+        const protocol = process.env.NEXT_PUBLIC_VERCEL_URL ? 'https' : 'http'
         const host = request.headers.get('host') || process.env.NEXT_PUBLIC_VERCEL_URL || 'localhost:3000'
         const origin = `${protocol}://${host}`
 
