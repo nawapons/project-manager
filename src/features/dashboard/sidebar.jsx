@@ -10,7 +10,7 @@ export const SidebarComponents = () => {
     return (
         <aside className="h-full bg-neutral-100 p-4 w-full">
             <Link href="/">
-                Logo
+                <Image src="/static/images/logo.png"  width="250" height="240"/>
             </Link>
             <SeparatorDotted className="my-4" />
             <div className="pt-2">
