@@ -17,6 +17,7 @@ export const useEditAccount = () => {
         onSuccess: () => {
             toast.success("Account updated")
             queryClient.invalidateQueries({ queryKey: ["current"] })
+            queryClient.invalidateQueries({ queryKey: ["tasks"] })
         },
         onError: (error) => {
             toast.error(error.response.data.message)
