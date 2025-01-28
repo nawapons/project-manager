@@ -1,31 +1,30 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 
 export async function GET(request) {
     const requestUrl = new URL(request.url)
     const code = requestUrl.searchParams.get('code')
-    const next = searchParams.get('next') ?? '/'
-    // if (code) {
-    //     const supabase = createClient()
-    //     await supabase.auth.exchangeCodeForSession(code)
+    const next = requestUrl.searchParams.get('next') ?? '/workspaces'
 
-    // }
     if (code) {
-        const supabase = await createClient()
+        const cookieStore = cookies()
+        const supabase = createClient(cookieStore)
+        
         const { error } = await supabase.auth.exchangeCodeForSession(code)
-        if (!error) {
-          const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
-          const isLocalEnv = process.env.NODE_ENV === 'development'
-          if (isLocalEnv) {
-            // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-            return NextResponse.redirect(`${origin}${next}`)
-          } else if (forwardedHost) {
-            return NextResponse.redirect(`https://${forwardedHost}${next}`)
-          } else {
-            return NextResponse.redirect(`${origin}${next}`)
-          }
+        
+        if (error) {
+            console.error('Auth error:', error)
+            return NextResponse.redirect(new URL('/', request.url))
         }
-      }
-    // Redirect to workspaces after successful authentication
-    return NextResponse.redirect(new URL('/workspaces', request.url))
+
+        // Get the correct origin
+        const protocol = process.env.VERCEL_URL ? 'https' : 'http'
+        const host = request.headers.get('host') || process.env.NEXT_PUBLIC_VERCEL_URL || 'localhost:3000'
+        const origin = `${protocol}://${host}`
+
+        return NextResponse.redirect(new URL(next, origin))
+    }
+
+    return NextResponse.redirect(new URL('/', request.url))
 }
