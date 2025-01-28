@@ -20,7 +20,7 @@ import { RiLockPasswordFill } from "react-icons/ri";
 export const UserButton = () => {
     const { data, isLoading } = useGetCurrent();
     const { mutate } = useLogOut();
-    if (isLoading) return (
+    if (isLoading || !data) return (
         <div className="size-10 rounded-full flex items-center justify-center bg-neutral-200 border border-neutral-300">
             <Loader className="size-4 animate-spin text-muted-foreground" />
         </div>
