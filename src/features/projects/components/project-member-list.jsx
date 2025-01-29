@@ -75,6 +75,7 @@ export const ProjectMemberList = () => {
                                     <MemberAvatar
                                         className="size-10"
                                         fallbackClassName="text-lg"
+                                        imageUrl={member.profiles.imageUrl}
                                         name={member.profiles.fullname} />
                                     <div className="flex flex-col">
                                         <p className="text-sm font-medium">{member.profiles.fullname}</p>

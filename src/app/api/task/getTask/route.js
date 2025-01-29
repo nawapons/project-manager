@@ -15,10 +15,13 @@ export async function GET(request) {
         if (!currentMember) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
 
         const { data: project } = await supabase.from("projects").select("*").eq("id", task[0].projectsId)
-        const { data: member } = await supabase.from("projects-members").select("*").eq("id", task[0].assigneeId)
-        const user = await supabaseAdmin.auth.admin.getUserById(member[0].userId)
+        const { data: member } = await supabase.from("projects_members").select("*").eq("id", task[0].assigneeId)
+        // const user = await supabaseAdmin.auth.admin.getUserById(member[0].userId)
+        const { data: user } = await supabase.from("profiles").select("*").eq("id", member[0].userId)
+        console.log("TASK ", user)
         const assignee = {
-            ...member, name: user.data.user.user_metadata.full_name, email: user.data.user.email
+            ...member, name: user[0].fullname, email: user[0].email, imageUrl: user[0].imageUrl
+            // ...member, name: user.data.user.user_metadata.full_name, email: user.data.user.email
         }
         return NextResponse.json({ data: { ...task, project, assignee } }, { status: 200 })
     } catch (error) {

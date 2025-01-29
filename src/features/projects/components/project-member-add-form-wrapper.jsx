@@ -16,6 +16,7 @@ export const AddProjectMemberFromWrapper = ({
         id: member.id,
         userId: member.userId,
         name: member.profiles.fullname,
+        imageUrl: member.profiles.imageUrl
     }))
 
     const isLoading = isLoadingMembers

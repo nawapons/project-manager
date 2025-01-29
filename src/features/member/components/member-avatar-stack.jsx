@@ -1,16 +1,17 @@
 import { cn } from "@/lib/utils"
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 export const MemberAvatarStack = ({
-    name, className, fallbackClassName
+    name,imageUrl, className, fallbackClassName
 }) => {
     return (
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
                     <Avatar className={cn("size-5 transition border border-neutral-300 rounded-full", className)}>
+                        <AvatarImage src={imageUrl} alt="logo-profile" />
                         <AvatarFallback className={cn(
                             "bg-neutral-200 font-medium text-neutral-500 flex items-center justify-center", fallbackClassName
                         )}>

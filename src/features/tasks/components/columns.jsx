@@ -68,7 +68,7 @@ export const columns = [
             const assignee = row.original.assignee;
             return (
                 <div className="flex items-center gap-x-2 text-sm font-medium">
-                    <MemberAvatar className="size-6" fallbackClassName="text-xs" name={assignee.name} />
+                    <MemberAvatar className="size-6" fallbackClassName="text-xs" imageUrl={assignee.imageUrl} name={assignee.name} />
                     <p className="line-clamp-1">{assignee.name}</p>
                 </div>
             )

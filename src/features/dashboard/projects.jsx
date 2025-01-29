@@ -9,18 +9,19 @@ import { ProjectAvatar } from "../projects/components/project-avatar";
 import { useCreateProjectModal } from "../projects/hooks/use-create-project";
 import { ProjectAddModal } from "../projects/components/project-add-modal";
 import { ProjectSkeleton } from "../skeleton/project-skeleton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const Projects = () => {
   const pathname = usePathname();
   const workspaceId = useWorkspaceId();
-  const {data: projects , isLoading: projectsLoading} = useGetProjects({workspaceId});
+  const { data: projects, isLoading: projectsLoading } = useGetProjects({ workspaceId });
   const { open: openProject } = useCreateProjectModal();
 
   return (
     <div className="flex flex-col gap-y-2">
       <ProjectAddModal />
       <div className="flex items-center justify-between">
-        <p className="text-xs uppercase text-neutral-500">Projects</p>
+        <p className="text-xs uppercase text-neutral-500">Projects (Max: 8)</p>
         <RiAddCircleFill
           onClick={openProject}
           className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition"
@@ -33,6 +34,7 @@ export const Projects = () => {
           const href = `/workspaces/${workspaceId}/projects/${project.id}`;
           const isActive = pathname === href;
           return (
+
             <Link href={href} key={project.id}>
               <div
                 className={cn(

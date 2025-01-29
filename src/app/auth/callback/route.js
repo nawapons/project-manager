@@ -10,15 +10,20 @@ export async function GET(request) {
     if (code) {
         const cookieStore = cookies()
         const supabase = createClient(cookieStore)
-        
-        const { error } = await supabase.auth.exchangeCodeForSession(code)
-        
+
+        const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+
         if (error) {
             console.error('Auth error:', error)
             return NextResponse.redirect(new URL('/', request.url))
         }
+        const { data: userData } = await supabase.from("profiles").select("*").eq("id", data.user.id)
+        if (userData[0].imageUrl === null) {
+            await supabase.from("profiles").update({
+                imageUrl: data.user.user_metadata.avatar_url
+            }).eq("id", userData[0].id)
+        }
 
-        // Get the correct origin
         const protocol = process.env.NEXT_PUBLIC_VERCEL_URL ? 'https' : 'http'
         const host = request.headers.get('host') || process.env.NEXT_PUBLIC_VERCEL_URL || 'localhost:3000'
         const origin = `${protocol}://${host}`
