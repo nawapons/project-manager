@@ -251,7 +251,7 @@ export const MemberList = ({ data, total }) => {
                 <div className="p-2">
                     <div className="space-y-8">
                         {data.map((member) => (
-                            <div className="flex items-center">
+                            <div className="flex items-center" key={member.id}>
                                 <MemberAvatar
                                     className="size-9"
                                     imageUrl={member.profiles.imageUrl}

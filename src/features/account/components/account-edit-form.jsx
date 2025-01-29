@@ -61,7 +61,7 @@ export const AccountEditForm = ({ initialValues }) => {
                                 control={form.control}
                                 name="image"
                                 render={({ field }) => (
-                                    <div className="flex flex-col gap-y-2">
+                                    <div className="flex flex-col gap-y-2 items-center">
                                         <div className="flex items-center gap-x-5">
                                             <div className="relative inline-block">
                                                 {field.value ? (
