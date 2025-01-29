@@ -13,7 +13,7 @@ export async function GET(request) {
         if (!workspaceId) {
             return NextResponse.json({ message: "Missing workspaceId!" }, { status: 401 })
         }
-        const { data: members } = await supabase.from("projects-members").select("*").eq("userId", userId)
+        const { data: members } = await supabase.from("projects_members").select("*").eq("userId", userId)
         if (!members) {
             return NextResponse.json({ data: [] }, { status: 200 })
         }
@@ -23,9 +23,12 @@ export async function GET(request) {
         //     return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
         // }
 
-        const { data, error } = await supabase.from("projects").select("*").in("id", projectIds).eq("workspacesId", workspaceId).order("created_at", { ascending: false })
+        const { data, error } = await supabase.from("projects").select(`*,projects_members(profiles(fullname,imageUrl))`).in("id", projectIds).eq("workspacesId", workspaceId).order("created_at", { ascending: false })
+        // const newProjectIds = data.map((project) => project.id)
+        // const { data: projectMembers } = await supabase.from("projects-members").select("*").in("projectsId", newProjectIds)
         if (error) return null;
-        return NextResponse.json({ data }, { status: 200 })
+        // console.log(projectMembers)
+        return NextResponse.json({ data: data }, { status: 200 })
     } catch (error) {
         return NextResponse.json({ message: "Failed to get project!" }, { status: 500 })
     }
@@ -41,6 +44,16 @@ export async function POST(request) {
         const workspacesId = body.get("form[workspaceId]")
         const image = body.get("form[image]")
         const userId = (await supabase.auth.getUser()).data.user.id
+
+        const { data: checkExists } = await supabase.from('projects').select('*').eq('name', name).eq('workspacesId', workspacesId)
+        if (checkExists.length > 0) {
+            return NextResponse.json({ message: "project is already exists" }, { status: 401 })
+        }
+        const {data: checkTotalProjects} = await supabase.from('projects').select('*').eq('workspacesId', workspacesId)
+        if(checkTotalProjects.length >= 8){
+            return NextResponse.json({ message: "You can create only 8 projects per workspace!" }, { status: 401 })
+        }
+
         let imageUrl
         const newImageName = uuidv4()
 
@@ -52,17 +65,12 @@ export async function POST(request) {
             const { data } = supabase.storage.from('projects').getPublicUrl(newImageName)
             imageUrl = data.publicUrl
         }
-
-        const { data: checkExists } = await supabase.from('projects').select('*').eq('name', name).eq('workspacesId', workspacesId)
-        if (checkExists.length > 0) {
-            return NextResponse.json({ message: "project is already exists" }, { status: 401 })
-        }
         const { data: newProject, error: insertError } = await supabase.from('projects').insert({
             workspacesId,
             name,
             imageUrl: imageUrl
         }).select()
-        const { error: insertMemberError } = await supabase.from('projects-members').insert({
+        const { error: insertMemberError } = await supabase.from('projects_members').insert({
             projectsId: newProject[0].id,
             userId: userId,
             role: "ADMIN"
@@ -70,9 +78,9 @@ export async function POST(request) {
         if (insertError || insertMemberError) {
             return NextResponse.json({ message: "add new project failed" }, { status: 401 })
         }
-
         return NextResponse.json({ data: newProject }, { status: 200 })
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ message: "Failed to create project!" }, { status: 500 })
     }
 }

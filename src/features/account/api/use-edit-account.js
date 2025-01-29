@@ -5,9 +5,13 @@ import { toast } from "sonner"
 export const useEditAccount = () => {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: async ({ userId, fullname }) => {
+        mutationFn: async ({ form }) => {
             const response = await axios.patch("/api/account", {
-                userId, fullname
+                form
+            }, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             })
             if (response.status !== 200) {
                 throw new Error("Failed to update account")

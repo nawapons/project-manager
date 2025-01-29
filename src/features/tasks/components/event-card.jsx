@@ -36,7 +36,7 @@ export const EventCard = ({
                 , statusColorMap[status]
             )}>
                 <div className="flex items-center gap-x-2">
-                    <MemberAvatarStack name={assignee?.name} />
+                    <MemberAvatarStack imageUrl={assignee?.imageUrl} name={assignee?.name} />
                     <div className="size-1 rounded-full bg-neutral-300"/>
                     <p>{title}</p>
                 </div>

@@ -54,7 +54,7 @@ export async function GET(request) {
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
     const userId = (await supabase.auth.getUser()).data.user.id
-    const member = await supabase.from("projects-members").select("*").eq("userId", userId)
+    const member = await supabase.from("projects_members").select("*").eq("userId", userId)
     if (!member) {
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
@@ -81,16 +81,18 @@ export async function GET(request) {
         .in("id", projectsIds.length > 0 ? projectsIds : []);
 
     const { data: members } = await supabase
-        .from("projects-members")
+        .from("projects_members")
         .select("*")
         .in("id", assigneeIds.length > 0 ? assigneeIds : []);
 
     const assignees = await Promise.all(
         members.map(async (member) => {
-            const user = await supabaseAdmin.auth.admin.getUserById(member.userId)
+            const { data: user } = await supabase.from("profiles").select("*").eq("id", member.userId)
+            // const user = await supabaseAdmin.auth.admin.getUserById(member.userId)
             // const user = await supabase.auth.admin.getUserById(member.userId)
             return {
-                ...member, name: user.data.user.user_metadata.full_name, email: user.data.user.email
+                ...member, name: user[0].fullname, email: user[0].email,imageUrl: user[0].imageUrl
+                // ...member, name: user.data.user.user_metadata.full_name, email: user.data.user.email
             }
         })
     )
@@ -127,7 +129,7 @@ export async function PATCH(request) {
     const taskId = body.params.taskId
     const { data: existingTask } = await supabase.from("tasks").select("*").eq("id", taskId)
 
-    const member = await supabase.from("projects-members").select("*").eq("projectsId", existingTask[0].projectsId).eq("userId", userId)
+    const member = await supabase.from("projects_members").select("*").eq("projectsId", existingTask[0].projectsId).eq("userId", userId)
     if (!member) return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
 
     const { data: task } = await supabase.from("tasks").update({

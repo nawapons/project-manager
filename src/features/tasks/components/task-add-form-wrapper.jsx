@@ -37,6 +37,7 @@ export const CreateTaskFormWrapper = ({
             id: member.id,
             userId: member.userId,
             name: member.profiles.fullname,
+            imageUrl: member.profiles.imageUrl,
         }))
         : members
             ?.filter((member) => member.userId === user?.userId)
@@ -44,6 +45,7 @@ export const CreateTaskFormWrapper = ({
                 id: member.id,
                 userId: member.userId,
                 name: member.profiles.fullname,
+                imageUrl: member.profiles.imageUrl,
             }));
     const isLoading = isLoadingProjects || isLoadingUser
 

@@ -42,7 +42,7 @@ export const TaskComment = ({ user, taskId }) => {
                 comments.length > 0 ? (
                     comments.map((comment, index) => (
                         <div key={index} className="flex items-start gap-3 mb-3">
-                            <MemberAvatar className="size-8" fallbackClassName="text-xs" name={comment.member.fullname} />
+                            <MemberAvatar className="size-8" fallbackClassName="text-xs" imageUrl={comment.member.imageUrl} name={comment.member.fullname} />
                             <div className="grid gap-1.5 flex-1">
                                 <div className="flex items-start justify-between gap-x-2">
                                     <div className="flex items-center justify-start gap-x-2">
@@ -66,7 +66,7 @@ export const TaskComment = ({ user, taskId }) => {
             )
             }
             <div className="flex w-full max-w-full items-center space-x-3">
-                <MemberAvatar className="size-8" fallbackClassName="text-xs" name={user.full_name} />
+                <MemberAvatar className="size-8" fallbackClassName="text-xs" imageUrl={user.imageUrl} name={user.fullname} />
                 <Input value={value} onChange={((e) => setValue(e.target.value))} type="text" name="comment" placeholder="Write comment" />
                 <Button onClick={onSubmit} disabled={isPending} variant="primary"><SendHorizonal className="size-16" /></Button>
             </div>

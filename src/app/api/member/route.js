@@ -13,7 +13,7 @@ export async function GET(request) {
         if (!member) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
-        const { data: members } = await supabase.from("members").select(`*,profiles(fullname,email)`).eq("workspacesId", workspaceId)
+        const { data: members } = await supabase.from("members").select(`*,profiles(fullname,email,imageUrl)`).eq("workspacesId", workspaceId)
         return NextResponse.json({ data: members }, { status: 200 })
     } catch (error) {
         return NextResponse.json({ message: "Failed to get member!" }, { status: 500 })

@@ -13,6 +13,13 @@ export const loginSchema = z.object({
 export const updateSchema = z.object({
     fullname: z.string().trim().min(1, { message: "Required" }),
     email: z.string().min(1, { message: "Required" }).email("This is not valid email").optional(),
+    image: z
+        .union([
+            z.instanceof(File), // Handle uploaded files
+            z.string().transform((value) => (value === "" ? undefined : value)), // Transform empty string to null
+            z.null(), // Allow explicitly null values
+        ])
+        .optional(),
 })
 export const passwordSchema = z.object({
     oldPassword: z.string().min(8, { message: "Password must be at least 8 characters" }),

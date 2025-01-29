@@ -25,7 +25,7 @@ export const UserButton = () => {
             <Loader className="size-4 animate-spin text-muted-foreground" />
         </div>
     );
-    const { full_name: name, email, avatar_url: image } = data;
+    const { fullname: name, email, imageUrl: image } = data;
     const avartarFallback = name ? name.charAt(0).toUpperCase() : email.charAt(0).toUpperCase() ?? "U";
 
     const signOut = async () => {

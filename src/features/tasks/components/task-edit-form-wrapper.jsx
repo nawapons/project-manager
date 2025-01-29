@@ -51,15 +51,17 @@ export const EditTaskFormWrapper = ({
         ? members?.map((member) => ({
             id: member.id,
             name: member.profiles.fullname,
+            imageUrl: member.profiles.imageUrl,
         }))
         : members
             ?.filter((member) => member.userId === user?.userId)
             .map((member) => ({
                 id: member.id,
                 name: member.profiles.fullname,
+                imageUrl: member.profiles.imageUrl,
             }));
 
-    const isLoading = isLoadingProjects || isLoadingTask || isLoadingMembers || isLoadingUser;
+    const isLoading = isLoadingProjects || isLoadingTask || isLoadingUser;
 
     const handleProjectChange = (projectId) => {
         setSelectedProjectId(projectId);

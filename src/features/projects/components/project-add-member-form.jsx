@@ -40,7 +40,7 @@ export const AddProjectMemberForm = ({ onCancel, memberOptions }) => {
                 <CommandGroup heading="User list">
                     {memberOptions.map((member, index) => (
                         <CommandItem key={index} className="flex justify-between">
-                            <MemberAvatar className="size-6" name={member.name} />
+                            <MemberAvatar className="size-6" imageUrl={member.imageUrl} name={member.name} />
                             <span>{member.name}</span>
                             <CommandShortcut><Button disabled={isPending} onClick={() => onSelectUser(member.userId)} size="icon" variant="ghost"><Plus /></Button></CommandShortcut>
                         </CommandItem>

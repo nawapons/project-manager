@@ -12,7 +12,7 @@ import { PencilIcon } from "lucide-react";
 import Link from "next/link";
 import { useGetMembers } from "@/features/member/api/use-get-members";
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Tooltip,
     TooltipContent,
@@ -52,6 +52,7 @@ export const ProjectIdClient = () => {
                                         <Avatar
                                             className={cn("text-sm bg-neutral-200 font-medium text-neutral-500 h-7 w-7 shrink-0 overflow-hidden mr-1.5 rounded-full flex flex-row -space-x-5 -space-y-5 hover:z-10", "hover:z-10")}
                                         >
+                                            <AvatarImage src={member.profiles.imageUrl} alt="logo-profile" />
                                             <AvatarFallback>
                                                {member.profiles.fullname.charAt(0).toUpperCase()}
                                             </AvatarFallback>
@@ -86,7 +87,6 @@ export const ProjectIdClient = () => {
 
                         ) : null}
                     </div>
-
                 </div>
                 <div>
                     <Button className="" variant="secondary" size="sm" asChild>
