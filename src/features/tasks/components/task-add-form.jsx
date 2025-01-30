@@ -130,6 +130,41 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions,onProje
                             />
                             <FormField
                                 control={form.control}
+                                name="projectsId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            Project
+                                        </FormLabel>
+                                        <Select disabled={projectId} defaultValue={field.value} onValueChange={(value) => {
+                                            field.onChange(value);
+                                            onProjectChange?.(value);
+                                        }}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select project" aria-label={projectId} />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <FormMessage />
+                                            <SelectContent>
+                                                {projectOptions.map((project) =>
+                                                (
+                                                    <SelectItem key={project.id} value={project.id}>
+                                                        <div className="flex items-center gap-x-2">
+                                                            <ProjectAvatar className="size-6" name={project.name}
+                                                                image={project.imageUrl} />
+                                                            {project.name}
+                                                        </div>
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="assigneeId"
                                 render={({ field }) => (
                                     <FormItem>
@@ -206,41 +241,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions,onProje
                                     </FormItem>
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="projectsId"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>
-                                            Project
-                                        </FormLabel>
-                                        <Select disabled={projectId} defaultValue={field.value} onValueChange={(value) => {
-                                            field.onChange(value);
-                                            onProjectChange?.(value);
-                                        }}>
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select project" aria-label={projectId} />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <FormMessage />
-                                            <SelectContent>
-                                                {projectOptions.map((project) =>
-                                                (
-                                                    <SelectItem key={project.id} value={project.id}>
-                                                        <div className="flex items-center gap-x-2">
-                                                            <ProjectAvatar className="size-6" name={project.name}
-                                                                image={project.imageUrl} />
-                                                            {project.name}
-                                                        </div>
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
+                            
                         </div>
                         <SeparatorDotted />
                         <div className="flex justify-between items-center p-2">

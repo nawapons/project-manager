@@ -75,8 +75,11 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
     const onSubmit = async (values) => {
         const finalValues = {
             ...values,
-            image: values.image instanceof File ? values.image : undefined,
+            image: values.image instanceof File
+                ? values.image
+                : (values.image === initialValues.imageUrl ? initialValues.imageUrl : undefined),
         }
+        console.log(finalValues)
         editWorkspace({
             form: finalValues,
             param: { workspaceId: initialValues.id }

@@ -53,7 +53,12 @@ export const WorkspaceSwitcher = () => {
                                     <span className="truncate">{workspace.name}</span>
                                 </>
                             )
-                            : "Select workspace..."
+                            : (workspace = workspaces.find((workspace) => workspace.id === workspaceId)) && (
+                                <>
+                                    <WorkspaceAvatar name={workspace.name} image={workspace.imageUrl} />
+                                    <span className="truncate">{workspace.name}</span>
+                                </>
+                            )
                     }
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -76,6 +81,12 @@ export const WorkspaceSwitcher = () => {
                                 >
                                     <WorkspaceAvatar name={workspace.name} image={workspace.imageUrl} />
                                     <span className="truncate">{workspace.name}</span>
+                                    <Check
+                                        className={cn(
+                                            "ml-auto",
+                                            value === workspace.id ? "opacity-100" : "opacity-0"
+                                        )}
+                                    />
                                 </CommandItem>
                             ))}
                         </CommandGroup>

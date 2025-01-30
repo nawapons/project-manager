@@ -45,6 +45,11 @@ export async function POST(request) {
         const image = body.get("form[image]")
         const userId = (await supabase.auth.getUser()).data.user.id
 
+        const { data: workspaceMembers } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", workspacesId)
+        if (workspaceMembers[0].role !== "ADMIN") {
+            return NextResponse.json({ message: "You are now allowed to create project" }, { status: 401 })
+        }
+        
         const { data: checkExists } = await supabase.from('projects').select('*').eq('name', name).eq('workspacesId', workspacesId)
         if (checkExists.length > 0) {
             return NextResponse.json({ message: "project is already exists" }, { status: 401 })
@@ -79,6 +84,7 @@ export async function POST(request) {
             return NextResponse.json({ message: "add new project failed" }, { status: 401 })
         }
         return NextResponse.json({ data: newProject }, { status: 200 })
+
     } catch (error) {
         console.log(error)
         return NextResponse.json({ message: "Failed to create project!" }, { status: 500 })
@@ -92,7 +98,11 @@ export async function PATCH(request) {
     const projectId = body.get("param[projectId]")
     const cookieStore = cookies()
     const supabase = createClient(cookieStore)
-    const userId = (await supabase.auth.getUser()).data.user.id
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    const userId = user.id;
     const { data: existingProject } = await supabase.from("projects").select("*").eq("id", projectId)
 
     const { data: member } = await supabase.from("members").select("*").eq("userId", userId).eq("workspacesId", existingProject[0].workspacesId)
@@ -103,9 +113,34 @@ export async function PATCH(request) {
 
     let imageUrl
 
+    if (image === null || image instanceof File) {
+        const { data: projectData, error: projectError } = await supabase
+            .from("projects")
+            .select("imageUrl")
+            .eq("id", projectId)
+            .single();
+
+        if (projectError) {
+            return NextResponse.json({ message: "Failed to fetch project data" }, { status: 500 });
+        }
+
+        if (projectData?.imageUrl) {
+            const urlPath = projectData.imageUrl.split("/");
+            const filePath = urlPath[urlPath.length - 1];
+            const { error: deleteError } = await supabase.storage.from("projects").remove([filePath]);
+
+            if (deleteError) {
+                return NextResponse.json({ message: "Failed to delete old image" }, { status: 500 });
+            }
+        }
+    }
+
     const newImageName = uuidv4()
 
     if (image instanceof File) {
+        if (image.size > 1048576) {
+            return NextResponse.json({ message: "File size should not exceed 1MB" }, { status: 400 });
+        }
         const { error } = await supabase.storage.from('projects').upload(newImageName, image)
         if (error) {
             return NextResponse.json({ message: "upload file failed" }, { status: 200 })
