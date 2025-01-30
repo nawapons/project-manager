@@ -6,6 +6,7 @@ import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id"
 import { usePathname } from "next/navigation"
+import { MessageCircle } from "lucide-react"
 const items = [
     {
         title: "Home",
@@ -18,6 +19,12 @@ const items = [
         href: "/tasks",
         icon: GoCheckCircle,
         activeIcon: GoCheckCircleFill
+    },
+    {
+        title: "Message",
+        href: "/message",
+        icon: MessageCircle,
+        activeIcon: MessageCircle
     },
     {
         title: "Settings",
