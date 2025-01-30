@@ -21,7 +21,7 @@ export const Projects = () => {
     <div className="flex flex-col gap-y-2">
       <ProjectAddModal />
       <div className="flex items-center justify-between">
-        <p className="text-xs uppercase text-neutral-500">Projects (Max: 8)</p>
+        <p className="text-xs uppercase text-neutral-500">Projects ({projects.length} / 8)</p>
         <RiAddCircleFill
           onClick={openProject}
           className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition"

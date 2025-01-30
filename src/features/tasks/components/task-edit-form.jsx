@@ -180,7 +180,6 @@ export const EditTaskForm = ({ onCancel, projectOptions, memberOptions, initialV
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -225,7 +224,6 @@ export const EditTaskForm = ({ onCancel, projectOptions, memberOptions, initialV
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />

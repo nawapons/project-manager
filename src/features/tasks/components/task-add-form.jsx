@@ -159,7 +159,6 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions,onProje
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -190,7 +189,6 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions,onProje
                                                 ))}
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -237,7 +235,6 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions,onProje
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
