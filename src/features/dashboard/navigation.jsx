@@ -22,7 +22,7 @@ const items = [
     },
     {
         title: "Message",
-        href: "/message",
+        href: "/message/conversations",
         icon: MessageCircle,
         activeIcon: MessageCircle
     },
