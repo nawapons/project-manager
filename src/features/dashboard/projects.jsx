@@ -16,7 +16,7 @@ export const Projects = () => {
   const workspaceId = useWorkspaceId();
   const { data: projects, isLoading: projectsLoading } = useGetProjects({ workspaceId });
   const { open: openProject } = useCreateProjectModal();
-  if (projectsLoading) return <div><ProjectSkeleton /></div>
+  if (projectsLoading) return <ProjectSkeleton />
   return (
     <div className="flex flex-col gap-y-2">
       <ProjectAddModal />
