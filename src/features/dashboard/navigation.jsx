@@ -21,12 +21,6 @@ const items = [
         activeIcon: GoCheckCircleFill
     },
     {
-        title: "Message",
-        href: "/message",
-        icon: MessageCircle,
-        activeIcon: MessageCircle
-    },
-    {
         title: "Settings",
         href: "/settings",
         icon: SettingsIcon,
