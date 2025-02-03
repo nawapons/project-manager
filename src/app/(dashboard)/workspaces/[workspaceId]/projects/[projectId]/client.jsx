@@ -21,17 +21,20 @@ import {
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils";
 import { useGetProjectMembers } from "@/features/projects/api/use-get-project-member";
+import { useGetCurrent } from "@/features/auth/api/use-get-current";
 export const ProjectIdClient = () => {
     const workspaceId = useWorkspaceId();
     const projectId = useProjectId();
+    const { data: user, isLoading: isLoadingUser } = useGetCurrent();
     const { data: members, isLoading: isLoadingMembers } = useGetProjectMembers({ projectId })
     const { data: project, isLoading: isLoadingProject } = useGetProject({ projectId })
     const { data: analytics, isLoading: isLoadingAnalytics } = useGetProjectAnalytics({ projectId })
-    const isLoading = isLoadingProject || isLoadingAnalytics || isLoadingMembers;
+    const isLoading = isLoadingProject || isLoadingAnalytics || isLoadingMembers || isLoadingUser;
     if (isLoading) {
         return <PageLoader />
     }
     if (!project) {
+        s
         return <PageError message="Project not found!" />
     }
     const maxAvatarsAmount = 3
@@ -54,7 +57,7 @@ export const ProjectIdClient = () => {
                                         >
                                             <AvatarImage src={member.profiles.imageUrl} alt="logo-profile" />
                                             <AvatarFallback>
-                                               {member.profiles.fullname.charAt(0).toUpperCase()}
+                                                {member.profiles.fullname.charAt(0).toUpperCase()}
                                             </AvatarFallback>
                                         </Avatar>
                                         {/* <MemberAvatar
@@ -89,12 +92,14 @@ export const ProjectIdClient = () => {
                     </div>
                 </div>
                 <div>
-                    <Button className="" variant="secondary" size="sm" asChild>
-                        <Link href={`/workspaces/${project[0].workspacesId}/projects/${project[0].id}/settings`}>
-                            <PencilIcon className="size-4 mr-2" />
-                            Edit Project
-                        </Link>
-                    </Button>
+                    {members.find((member) => member.userId === user.userId)?.role === "ADMIN" && (
+                        <Button className="" variant="secondary" size="sm" asChild>
+                            <Link href={`/workspaces/${project[0].workspacesId}/projects/${project[0].id}/settings`}>
+                                <PencilIcon className="size-4 mr-2" />
+                                Edit Project
+                            </Link>
+                        </Button>
+                    )}
                 </div>
             </div>
             {analytics ? (

@@ -57,7 +57,9 @@ export const EditProjectForm = ({ onCancel, initialValues }) => {
     const onSubmit = async (values) => {
         const finalValues = {
             ...values,
-            image: values.image instanceof File ? values.image : undefined,
+            image: values.image instanceof File
+                ? values.image
+                : (values.image === initialValues[0].imageUrl ? initialValues[0].imageUrl : undefined),
         }
         mutate({
             form: finalValues,

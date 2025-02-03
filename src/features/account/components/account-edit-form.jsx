@@ -31,8 +31,11 @@ export const AccountEditForm = ({ initialValues }) => {
     const onSubmit = async (values) => {
         const finalValues = {
             ...values,
-            image: values.image instanceof File ? values.image : values.image === initialValues.imageUrl ? initialValues.imageUrl : undefined,
+            image: values.image instanceof File
+                ? values.image
+                : (values.image === initialValues.imageUrl ? initialValues.imageUrl : undefined),
         }
+        console.log(finalValues)
         mutate({ form: finalValues })
         // mutate({ userId: initialValues.userId, fullname })
     }
@@ -112,7 +115,7 @@ export const AccountEditForm = ({ initialValues }) => {
                                                         variant="primary"
                                                         size="xs"
                                                         className="absolute bottom-0 right-0 p-1 rounded-full text-white transition-colors"
-                                                        onClick={() => inputRef.current?.click()}
+                                                        onClick={() => { inputRef.current?.click() }}
                                                     >
                                                         <PlusIcon />
                                                     </Button>

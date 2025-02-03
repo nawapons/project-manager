@@ -2,7 +2,7 @@ import { FaCaretDown, FaCaretUp } from "react-icons/fa"
 import { cn } from "@/lib/utils"
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 export const AnalyticsCard = ({
-    title, value, variant, increaseValue 
+    title, value, variant,lastMonthTotal
 }) => {
     const iconColor = variant === "up" ? "text-emerald-500" : "text-red-500"
     const increaseValueColor = variant === "up" ? "text-emerald-500" : "text-red-500";
@@ -11,12 +11,18 @@ export const AnalyticsCard = ({
         <div className="rounded-xl border bg-card text-card-foreground shadow">
             <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="tracking-tight text-md font-medium">{title}</div>
-                <Icon className={cn(iconColor,"size-4")}/>
+                <Icon className={cn(iconColor, "size-4")} />
             </div>
             <div className="p-6 pt-0">
-                <div className={cn(increaseValueColor,"truncate text-base font-medium")}>{increaseValue}</div>
+                <div className={cn(increaseValueColor, "truncate text-base font-medium")}>
+                    {value}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                    Last month: {lastMonthTotal}
+                </p>
             </div>
         </div>
+
         // <div className="shadow-none border-none w-full">
         //     <CardHeader>
         //         <div className="flex items-center gap-x-2.5">

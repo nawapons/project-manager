@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/middleware'
 export async function middleware(request) {
     try {
         const { supabase, response } = createClient(request)
-        
+
         // Get the code and next params from the URL if they exist
         const requestUrl = new URL(request.url)
         const code = requestUrl.searchParams.get('code')
@@ -19,13 +19,13 @@ export async function middleware(request) {
 
         // Check auth state
         const { data: { user } } = await supabase.auth.getUser()
-
         // Handle protected routes
         if (request.nextUrl.pathname.startsWith('/workspaces')) {
             if (!user) {
                 return NextResponse.redirect(new URL('/', request.url))
             }
         }
+        
 
         // Handle public routes
         if (request.nextUrl.pathname === '/') {

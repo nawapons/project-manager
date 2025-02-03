@@ -54,7 +54,7 @@ export const ResetPasswordForm = () => {
                                     <FormItem>
                                         <FormLabel>Current Password</FormLabel>
                                         <FormControl>
-                                            <Input {...field} type="password" required />
+                                            <Input {...field} type="password"  />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -67,7 +67,7 @@ export const ResetPasswordForm = () => {
                                     <FormItem>
                                         <FormLabel>New Password</FormLabel>
                                         <FormControl>
-                                            <Input {...field} type="password" required />
+                                            <Input {...field} type="password"  />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -80,7 +80,7 @@ export const ResetPasswordForm = () => {
                                     <FormItem>
                                         <FormLabel>Confirm Password</FormLabel>
                                         <FormControl>
-                                            <Input {...field} type="password" required />
+                                            <Input {...field} type="password"  />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
