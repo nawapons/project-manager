@@ -197,7 +197,8 @@ export const ProjectList = ({ data, total }) => {
                                                                         </Tooltip>
                                                                     </TooltipProvider>
                                                                 ))}
-                                                                {hiddenAvatars.length ? (
+                                                                {null}
+                                                                {/* {hiddenAvatars.length ? (
                                                                     <TooltipProvider>
                                                                         <Tooltip>
                                                                             <TooltipTrigger asChild>
@@ -214,7 +215,8 @@ export const ProjectList = ({ data, total }) => {
                                                                             </TooltipContent>
                                                                         </Tooltip>
                                                                     </TooltipProvider>
-                                                                ) : null}
+                                                                ) : null}  */}
+                                                                {/* todo bug */}
                                                             </div>
                                                         </div>
                                                     </div>
