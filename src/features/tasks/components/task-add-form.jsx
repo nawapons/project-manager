@@ -107,7 +107,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions,onProje
                                             Start Date
                                         </FormLabel>
                                         <FormControl>
-                                            <DatePicker {...field} />
+                                            <DatePicker placeholder="Select Start Date" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -122,7 +122,7 @@ export const CreateTaskForm = ({ onCancel, projectOptions, memberOptions,onProje
                                             Due Date
                                         </FormLabel>
                                         <FormControl>
-                                            <DatePicker {...field} />
+                                            <DatePicker placeholder="Select Due Date" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

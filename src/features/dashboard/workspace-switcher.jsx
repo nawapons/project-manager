@@ -40,7 +40,7 @@ export const WorkspaceSwitcher = () => {
         <div className="flex flex-col gap-y-2">
          <div className="flex items-center justify-between">
             <p className="text-xs uppercase text-neutral-500">Workspaces</p>
-            <RiAddCircleFill onClick={open} className="size-5 text-neutral-500 cursor-pointer hover:opacity-75 transition" />
+            <RiAddCircleFill name="btn-create-workspace" onClick={open} className="size-5 btn-create-workspace text-neutral-500 cursor-pointer hover:opacity-75 transition" />
         </div>
         <Popover open={openComboBox} onOpenChange={setOpenComboBox}>
             <PopoverTrigger asChild>

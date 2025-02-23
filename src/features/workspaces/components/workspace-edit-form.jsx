@@ -66,10 +66,6 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
         if (!ok) return;
         deleteWorkspace({
             param: { workspaceId: initialValues.id }
-        }, {
-            onSuccess: () => {
-                router.push("/")
-            }
         })
     }
     const onSubmit = async (values) => {
@@ -79,7 +75,6 @@ export const EditWorkspaceForm = ({ onCancel, initialValues }) => {
                 ? values.image
                 : (values.image === initialValues.imageUrl ? initialValues.imageUrl : undefined),
         }
-        console.log(finalValues)
         editWorkspace({
             form: finalValues,
             param: { workspaceId: initialValues.id }
