@@ -1,8 +1,10 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import {toast} from "sonner";
 
 export const useDeleteWorkspace = () => {
+    const router = useRouter();
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async ({param}) => {
@@ -19,7 +21,7 @@ export const useDeleteWorkspace = () => {
         onSuccess: (data) => {
             toast.success("workspace deleted")
             queryClient.invalidateQueries({queryKey: ["workspaces"]})
-            queryClient.invalidateQueries({queryKey: ["workspace", data.id]})
+            router.push("/")
         },
         onError: () => {
             toast.error("Failed to delete workspace")
