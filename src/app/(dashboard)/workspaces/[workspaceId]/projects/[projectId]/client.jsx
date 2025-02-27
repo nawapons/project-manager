@@ -53,7 +53,7 @@ export const ProjectIdClient = () => {
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <Avatar
-                                            className={cn("text-sm bg-neutral-200 font-medium text-neutral-500 h-7 w-7 shrink-0 overflow-hidden mr-1.5 rounded-full flex flex-row -space-x-5 -space-y-5 hover:z-10", "hover:z-10")}
+                                            className={cn("text-sm bg-neutral-200 border border-gray-200  font-medium text-neutral-500 h-7 w-7 shrink-0 overflow-hidden mr-1.5 rounded-full flex flex-row -space-x-5 -space-y-5 hover:z-10", "hover:z-10")}
                                         >
                                             <AvatarImage src={member.profiles.imageUrl} alt="logo-profile" />
                                             <AvatarFallback>
@@ -74,7 +74,7 @@ export const ProjectIdClient = () => {
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Avatar className="h-7 w-7 text-sm bg-neutral-200 font-medium text-neutral-500" key="Excesive avatars">
+                                        <Avatar className="h-7 w-7 text-sm border border-gray-200  bg-neutral-200 font-medium text-neutral-500" key="Excesive avatars">
                                             <AvatarFallback>
                                                 +{members.length - shownAvatars.length}
                                             </AvatarFallback>

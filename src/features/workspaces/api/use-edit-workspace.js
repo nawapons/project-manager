@@ -21,7 +21,7 @@ export const useEditWorkspace = () => {
             queryClient.invalidateQueries({queryKey: ["workspace", data[0].id]})
         },
         onError: (error) => {
-            toast.error(error.response.data.error)
+            toast.error(error.response.data.message)
         }
     });
 }
